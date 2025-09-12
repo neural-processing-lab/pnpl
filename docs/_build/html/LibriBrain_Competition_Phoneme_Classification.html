@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Phoneme Classification (LibriBrain) &#8212; PNPL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=859acbfe" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'LibriBrain_Competition_Phoneme_Classification';</script>
+    <link rel="icon" href="_static/pnpl-logo.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="prev" title="Speech Detection (LibriBrain)" href="LibriBrain_Competition_Speech_Detection.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pnpl-wordmark.png" class="logo__image only-light" alt="PNPL - Home"/>
+    <script>document.write(`<img src="_static/pnpl-wordmark.png" class="logo__image only-dark" alt="PNPL - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Public Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libribrain.html">LibriBrain</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="LibriBrain_Competition_Speech_Detection.html">Speech Detection (LibriBrain)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Phoneme Classification (LibriBrain)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html">pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.html">pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.grouped_dataset.GroupedDataset.html">pnpl.datasets.grouped_dataset.GroupedDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.hdf5.dataset.HDF5Dataset.html">pnpl.datasets.hdf5.dataset.HDF5Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.libribrain2025.constants.html">pnpl.datasets.libribrain2025.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pnpl.datasets.libribrain2025.constants_utils.html">pnpl.datasets.libribrain2025.constants_utils</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/LibriBrain_Competition_Phoneme_Classification.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Phoneme Classification (LibriBrain)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-dependencies">Setting up dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-dataset">Preparing the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-task-phoneme-classification">The task: Phoneme Classification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-signal-averaging-the-training-data">Important: Signal averaging the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-model">Defining the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#actually-training">Actually training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validating-our-results">Validating our results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#that-s-it">That’s it! 🥳</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div style="padding:1rem; border-left:6px solid #6b7280; background:#f8fafc; border-radius:6px; margin-bottom:1rem;">
+  <p style="margin:0 0 .5rem 0; font-weight:700;">Recommended: run in Google Colab with a free GPU</p>
+  <ul style="margin:.25rem 0 .75rem 1.25rem;">
+    <li>In Colab: Runtime → Change runtime type → <b>GPU</b></li>
+  </ul>
+  <a href="https://colab.research.google.com/github/neural-processing-lab/2025-libribrain-competition/blob/main/static/colabs/LibriBrain_Competition_Phoneme_Classification.ipynb" target="_blank" rel="noopener">
+    <img src="https://colab.research.google.com/github/neural-processing-lab/2025-libribrain-competition/blob/main/static/colabs/LibriBrain_Competition_Phoneme_Classification.ipynb" alt="Open in Colab"/>
+  </a>
+</div><section class="tex2jax_ignore mathjax_ignore" id="phoneme-classification-libribrain">
+<h1>Phoneme Classification (LibriBrain)<a class="headerlink" href="#phoneme-classification-libribrain" title="Link to this heading">#</a></h1>
+<p>Welcome! This Colab is the starting point for the second track of the LibriBrain competition hosted by the <a class="reference external" href="https://ori.ox.ac.uk/labs/pnpl/">PNPL</a> at NeurIPS 2025. For a more basic introduction, you might prefer to take a look at the <a class="reference external" href="https://neural-processing-lab.github.io/2025-libribrain-competition/links/speech-colab">Speech Detection variant</a> first, which includes a more comprehensive introduction and a slightly simpler task.</p>
+<p>The following notebook will walk you through</p>
+<ol class="arabic simple">
+<li><p>setting up all necessary dependencies,</p></li>
+<li><p>downloading training data, and</p></li>
+<li><p>training a minimal model</p></li>
+</ol>
+<p>It is fully functional in the Colab Free Tier, though training will of course be faster with more GPU horsepower. With default settings on a <code class="docutils literal notranslate"><span class="pre">T4</span></code> instance, the main training run should take no more than 45 minutes. If you want to speed up model training, make sure you are on a GPU runtime by clicking Runtime -&gt; Change runtime type. TPU acceleration is currently not supported.</p>
+<p>In case of any questions or problems, please get in touch through <a class="reference external" href="https://neural-processing-lab.github.io/2025-libribrain-competition/links/discord">our Discord server</a>.</p>
+<p>⚠️ <strong>Note</strong>: We have only comprehensively validated the notebook to work on Colab and Unix. Your experience in other environments (e.g., Windows) may vary.</p>
+<section id="setting-up-dependencies">
+<h2>Setting up dependencies<a class="headerlink" href="#setting-up-dependencies" title="Link to this heading">#</a></h2>
+<p>Run the code below <em>as is</em>. It will download all required dependencies, including our own <a class="reference external" href="https://pypi.org/project/pnpl/">PNPL</a> package. On Windows, you might have to restart your Kernel after the installation has finished.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install additional dependencies</span>
+<span class="o">%</span><span class="k">pip</span> install -q mne_bids lightning torchmetrics scikit-learn plotly ipywidgets pnpl
+
+<span class="c1"># Set up base path for dataset and related files (base_path is assumed to be set in the cells below!)</span>
+<span class="n">base_path</span> <span class="o">=</span> <span class="s2">&quot;./libribrain&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">google.colab</span>  <span class="c1"># This module is only available in Colab.</span>
+    <span class="n">in_colab</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">base_path</span> <span class="o">=</span> <span class="s2">&quot;/content&quot;</span>  <span class="c1"># This is the folder displayed in the Colab sidebar</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">in_colab</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-the-dataset">
+<h2>Preparing the dataset<a class="headerlink" href="#preparing-the-dataset" title="Link to this heading">#</a></h2>
+<p>The code below will automatically download the training data. For our reference model, we’ll only use Sherlock1 sessions 1-11 as training data. For your implementation, you may want to set <code class="docutils literal notranslate"><span class="pre">partition=&quot;train&quot;</span></code> instead of manually providing run keys. This will automatically load all available training data (Sherlock Books 1-7) - an order of magnitude more data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pnpl.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">LibriBrainPhoneme</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+
+
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">LibriBrainPhoneme</span><span class="p">(</span>
+  <span class="n">data_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+  <span class="n">include_run_keys</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="s2">&quot;Sherlock1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)],</span>
+  <span class="n">tmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+  <span class="n">tmax</span> <span class="o">=</span> <span class="mf">0.5</span>
+  <span class="p">)</span>
+
+
+<span class="n">val_dataset</span> <span class="o">=</span> <span class="n">LibriBrainPhoneme</span><span class="p">(</span>
+  <span class="n">data_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+  <span class="n">partition</span><span class="o">=</span><span class="s2">&quot;validation&quot;</span><span class="p">,</span>  <span class="c1"># this is equal to `include_run_keys = [(&quot;0&quot;,11,&quot;Sherlock1&quot;,&quot;1&quot;)]`</span>
+  <span class="n">tmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+  <span class="n">tmax</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="p">)</span>
+
+
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">LibriBrainPhoneme</span><span class="p">(</span>
+  <span class="n">data_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/data/&quot;</span><span class="p">,</span> <span class="c1"># this is equal to `include_run_keys = [(&quot;0&quot;,12,&quot;Sherlock1&quot;,&quot;1&quot;)]</span>
+  <span class="n">partition</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+  <span class="n">tmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+  <span class="n">tmax</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The minimal example above is completely sufficient for you to get started. If you want to play around, here are all the options you <em>could</em> set:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: Path where you wish to store the dataset. The local dataset structure will follow the same BIDS-like structure as the HuggingFace repo:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">partition</span></code>: Convenient shortcut to specify train/validation/test split. Options: “train”, “validation”, “test”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_type</span></code>: Type of labels to return. Options: “phoneme” (e.g., ‘aa’, ‘ae’, ‘ah’, etc.) or “voicing”: Return voicing labels derived from phonemes indicating voiced. See <a class="reference external" href="https://en.wikipedia.org/wiki/Voice_(phonetics)">https://en.wikipedia.org/wiki/Voice_(phonetics)</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing_str</span></code>: By default, we expect files with preprocessing string “bads+headpos+sss+notch+bp+ds”. This indicates the preprocessing we have done (check Speech Detection tutorial for details)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tmin</span></code>: Start time of the sample in seconds relative to phoneme onset. For a phoneme at time T, you grab MEG data from T + tmin up to T + tmax. Default: 0.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tmax</span></code>: End time of the sample in seconds relative to phoneme onset. The number of timepoints per sample = int((tmax - tmin) * sfreq) where sfreq=250Hz. Default: 0.5 (this means each segment is made up of 125 samples)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">include_run_keys</span></code>: List of specific sessions to include. Format per session: (‘0’, ‘1’, ‘Sherlock1’, ‘1’) = Subject 0, Session 1, Task Sherlock1, Run 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclude_run_keys</span></code>: List of sessions to exclude (same format as include_run_keys).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclude_tasks</span></code>: List of task names to exclude (e.g., [‘Sherlock1’]).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">standardize</span></code>: Whether to z-score normalize each channel’s MEG data using mean and std computed across all included runs. Default: True</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clipping_boundary</span></code>: If specified, clips all MEG values to [-clipping_boundary, clipping_boundary]. Default: 10</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">channel_means</span></code> and <code class="docutils literal notranslate"><span class="pre">channel_stds</span></code>: Pre-computed channel means and stds for standardization. If provided, these will be used instead of computing from the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">include_info</span></code>: Whether to include additional info dict in each sample containing dataset name, subject, session, task, run, onset time, and full phoneme label (including word position indicators). Default: False</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preload_files</span></code>: Whether to “eagerly” download all dataset files from HuggingFace when the dataset object is created (True; default) or “lazily” download files on demand (False).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">download</span></code>: Whether to download files from HuggingFace if not found locally (True; default) or throw an error if files are missing locally (False).</p></li>
+</ul>
+</section>
+<section id="the-task-phoneme-classification">
+<h2>The task: Phoneme Classification<a class="headerlink" href="#the-task-phoneme-classification" title="Link to this heading">#</a></h2>
+<p>Before we go any further, let’s make sure we understand what we’re actually trying to accomplish. In contrast to the earlier Speech Detection task, where we just tried to figure out if our participant was listening to speech or not (binary classification), we’re now trying to figure out which sounds (= <a class="reference external" href="https://en.wikipedia.org/wiki/Phoneme">phonemes</a>) they were listening to. Specifically,</p>
+<ul class="simple">
+<li><p>each sample loaded by <code class="docutils literal notranslate"><span class="pre">LibriBrainPhoneme</span></code> corresponds to a “phoneme event” (i.e., a phoneme being heard), and</p></li>
+<li><p>each label/prediction corresponds to one of 39 phonemes (we used the ARPAbet phonemes classification <a class="reference external" href="http://speech.cs.cmu.edu/cgi-bin/cmudict">http://speech.cs.cmu.edu/cgi-bin/cmudict</a>)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pnpl.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">LibriBrainPhoneme</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let&#39;s look at our train_dataset in more detail:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Phoneme classes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">.</span><span class="n">labels_sorted</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Let&#39;s look at one sample</span>
+<span class="n">sample_data</span><span class="p">,</span> <span class="n">label_id</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># We can map the label ID to the actual phoneme it represents:</span>
+<span class="n">phoneme</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="o">.</span><span class="n">id_to_phoneme</span><span class="p">[</span><span class="n">label_id</span><span class="o">.</span><span class="n">item</span><span class="p">()]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SAMPLE 0:&quot;</span><span class="p">)</span>
+<span class="c1"># Note: The shape of the sample depends on the values you set for tmin and tmax - we&#39;re using default values (tmin=0, tmax=0.5)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Data shape: </span><span class="si">{</span><span class="n">sample_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> (306 MEG channels, by default: 125 samples = 0.5 seconds)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Label ID: </span><span class="si">{</span><span class="n">label_id</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Phoneme: &#39;</span><span class="si">{</span><span class="n">phoneme</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Data range: [</span><span class="si">{</span><span class="n">sample_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">sample_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Show phoneme mappings</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PHONEME MAPPINGS:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">phoneme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">.</span><span class="n">labels_sorted</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ID </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">phoneme</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="important-signal-averaging-the-training-data">
+<h2>Important: Signal averaging the training data<a class="headerlink" href="#important-signal-averaging-the-training-data" title="Link to this heading">#</a></h2>
+<p>While we could now train our model with the above dataloaders, the signal-to-noise ratio of a single sample is not high enough for reliable classifcation.
+Therefore, for this years competition, we will only evaluate on samples composed of 100 averaged instances of the same phoneme, with the exception of some of the rarer phonemes, for which less than 100 individual samples were available in the holdout. You can expect the distribution of phonemes in the portion of the holdout relevant for final evaluation to be similar to the validation/test split.</p>
+<p>Averaging brain signal with repeated stimuli (usally refered to as “Signal Averaging” or “Event-related potential” in the context of Neuroscience and Electrophysiology) is a common method for improving SNR. Lets explore this method effect on SNR.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pnpl.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">LibriBrainPhoneme</span>
+
+<span class="n">visualization_dataset</span> <span class="o">=</span> <span class="n">LibriBrainPhoneme</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">tmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">tmax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_run_keys</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)],</span>
+<span class="p">)</span>
+
+<span class="c1"># Collect samples for phoneme &#39;aa&#39;</span>
+<span class="n">phoneme_id</span> <span class="o">=</span> <span class="n">visualization_dataset</span><span class="o">.</span><span class="n">phoneme_to_id</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">]</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">visualization_dataset</span><span class="p">),</span> <span class="mi">2000</span><span class="p">)):</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">visualization_dataset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">==</span> <span class="n">phoneme_id</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">:</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">stacked_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="n">averaged_signal</span> <span class="o">=</span> <span class="n">stacked_samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Visualize</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">stacked_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">n_channels_show</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">n_samples_show</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_channels_show</span><span class="p">):</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">*</span> <span class="mi">3</span>
+    <span class="c1"># Plot multiple individual samples (chaotic)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples_show</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">stacked_samples</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Plot averaged signal (clean)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">averaged_signal</span><span class="p">[</span><span class="n">ch</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Signal Averaging: Some channels for phoneme /aa/&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Channel&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see above, averaging the signals of multiple instances of the same phoneme in the training data is sufficient filter out a lot of the noise. This is called <a class="reference external" href="https://en.wikipedia.org/wiki/Signal_averaging">signal averaging</a>. As part of the <code class="docutils literal notranslate"><span class="pre">pnpl</span></code> library, we provide the <code class="docutils literal notranslate"><span class="pre">GroupedDataset</span></code> class to easily  apply this transformation. Let’s apply it to our train dataset:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pnpl.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">GroupedDataset</span>
+
+
+<span class="c1"># Options:</span>
+<span class="c1"># - `original_dataset`: The original dataset to group</span>
+<span class="c1"># - `grouped_samples`: How many samples of each phoneme to group (default: 10)</span>
+<span class="c1"># - `drop_remaining`: Whether to drop the last group if it is incomplete (default: False)</span>
+<span class="c1"># - `shuffle`: Whether to shuffle the samples (default: False)</span>
+<span class="c1"># - `average_grouped_samples`: Whether to average the grouped samples (default: True)</span>
+<span class="n">averaged_train_dataset</span> <span class="o">=</span> <span class="n">GroupedDataset</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">grouped_samples</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># As expected, averaging 100 phonemes into a single sample (while keeping the incomplete final groups) reduces the total number of samples by just under 100x:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Single samples: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Averaged samples: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">averaged_train_dataset</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Keep in mind that while we will evaluate the results on averging of 100 instances, we invite participants to find the optimal value for training a phoneme model. We will stick with grouping 100 samples in this notebook, but you may wish to try other options!</p>
+</section>
+<section id="defining-the-model">
+<h2>Defining the model<a class="headerlink" href="#defining-the-model" title="Link to this heading">#</a></h2>
+<p>Now that we have explored the training data in detail, this is the model architecture we’ll use:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchmetrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">F1Score</span>
+
+<span class="c1"># Basic LightningModule</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PhonemeClassificationModel</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="mi">306</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16000</span><span class="p">,</span> <span class="mi">39</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f1_macro</span> <span class="o">=</span> <span class="n">F1Score</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">39</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;multiclass&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">f1_macro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f1_macro</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;train_loss&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;train_f1_macro&#39;</span><span class="p">,</span> <span class="n">f1_macro</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">loss</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">f1_macro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f1_macro</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;val_f1_macro&#39;</span><span class="p">,</span> <span class="n">f1_macro</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">loss</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="actually-training">
+<h2>Actually training<a class="headerlink" href="#actually-training" title="Link to this heading">#</a></h2>
+<p>The code below will train the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lightning.pytorch.loggers</span><span class="w"> </span><span class="kn">import</span> <span class="n">TensorBoardLogger</span><span class="p">,</span> <span class="n">CSVLogger</span>
+
+<span class="c1"># Setup paths for logs and checkpoints</span>
+<span class="n">LOG_DIR</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/lightning_logs&quot;</span>
+<span class="n">CHECKPOINT_PATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_path</span><span class="si">}</span><span class="s2">/models/phoneme_model.ckpt&quot;</span>
+
+<span class="c1"># Minimal logging setup</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span>
+    <span class="n">save_dir</span><span class="o">=</span><span class="n">LOG_DIR</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="n">in_colab</span><span class="p">:</span>  <span class="c1"># In Colab, we use the built-in Tensorboard setup</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">TensorBoardLogger</span><span class="p">(</span>
+        <span class="n">save_dir</span><span class="o">=</span><span class="n">LOG_DIR</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_hp_metric</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">LOG_DIR</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">LOG_DIR</span><span class="p">)</span>
+    <span class="o">%</span><span class="k">load_ext</span> tensorboard
+    <span class="o">%</span><span class="k">tensorboard</span> --logdir $LOG_DIR
+
+<span class="c1"># Set a fixed seed for reproducibility</span>
+<span class="n">L</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Conditionally set num_workers to avoid multiprocessing issues (try increasing if performance is problematic)</span>
+<span class="n">num_workers</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">in_colab</span> <span class="k">else</span> <span class="mi">0</span>
+
+<span class="c1"># Configure data loaders</span>
+<span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">averaged_train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
+<span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
+
+<span class="c1"># Initialize the PhonemeClassificationModel model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">PhonemeClassificationModel</span><span class="p">()</span>
+
+<span class="c1"># Log Hyperparameters (these will be empty be default!)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">log_hyperparams</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">hparams</span><span class="p">)</span>
+
+<span class="c1"># Initialize trainer</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
+    <span class="n">devices</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Actually train the model</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dataloader</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span>
+
+<span class="c1"># Save the trained model</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">CHECKPOINT_PATH</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="validating-our-results">
+<h2>Validating our results<a class="headerlink" href="#validating-our-results" title="Link to this heading">#</a></h2>
+<p>Let’s look at how our model performs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torchmetrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">F1Score</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">val_loader</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">disp_labels</span> <span class="o">=</span> <span class="n">labels</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">predicted_phonemes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">true_phonemes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">val_loader</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">predicted_phonemes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+            <span class="n">true_phonemes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">true_phonemes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">true_phonemes</span><span class="p">)</span>
+    <span class="n">predicted_phonemes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">predicted_phonemes</span><span class="p">)</span>
+
+    <span class="n">f1_macro</span> <span class="o">=</span> <span class="n">F1Score</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;multiclass&quot;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
+                       <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">disp_labels</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">random_preds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">disp_labels</span><span class="p">),</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">true_phonemes</span><span class="p">),),</span> <span class="n">device</span><span class="o">=</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">random_f1_macro</span> <span class="o">=</span> <span class="n">f1_macro</span><span class="p">(</span>
+        <span class="n">random_preds</span><span class="p">,</span> <span class="n">true_phonemes</span><span class="p">)</span>
+
+    <span class="n">f1_macro</span> <span class="o">=</span> <span class="n">f1_macro</span><span class="p">(</span><span class="n">predicted_phonemes</span><span class="p">,</span> <span class="n">true_phonemes</span><span class="p">)</span>
+
+
+    <span class="n">binary_f1</span> <span class="o">=</span> <span class="n">F1Score</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">disp_labels</span><span class="p">))</span>
+    <span class="n">f1_by_class</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">random_f1_by_class</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">class_preds</span> <span class="o">=</span> <span class="n">predicted_phonemes</span> <span class="o">==</span> <span class="n">c</span>
+        <span class="n">class_targets</span> <span class="o">=</span> <span class="n">true_phonemes</span> <span class="o">==</span> <span class="n">c</span>
+        <span class="n">class_f1</span> <span class="o">=</span> <span class="n">binary_f1</span><span class="p">(</span><span class="n">class_preds</span><span class="p">,</span> <span class="n">class_targets</span><span class="p">)</span>
+        <span class="n">class_random_preds</span> <span class="o">=</span> <span class="n">random_preds</span> <span class="o">==</span> <span class="n">c</span>
+        <span class="n">class_random_f1</span> <span class="o">=</span> <span class="n">binary_f1</span><span class="p">(</span><span class="n">class_random_preds</span><span class="p">,</span> <span class="n">class_targets</span><span class="p">)</span>
+
+        <span class="n">f1_by_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_f1</span><span class="p">)</span>
+        <span class="n">random_f1_by_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_random_f1</span><span class="p">)</span>
+
+    <span class="c1"># We want to return tensors not lists</span>
+    <span class="n">f1_by_class</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">f1_by_class</span><span class="p">)</span>
+    <span class="n">random_f1_by_class</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">random_f1_by_class</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f1_macro</span><span class="p">,</span> <span class="n">random_f1_macro</span><span class="p">,</span> <span class="n">f1_by_class</span><span class="p">,</span> <span class="n">random_f1_by_class</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f1_macro</span><span class="p">,</span> <span class="n">random_f1_macro</span><span class="p">,</span> <span class="n">f1_by_class</span><span class="p">,</span> <span class="n">random_f1_by_class</span> <span class="o">=</span> <span class="n">validate</span><span class="p">(</span><span class="n">val_dataloader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">.</span><span class="n">labels_sorted</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1 Macro for random predictions (1/39): &quot;</span><span class="p">,</span> <span class="n">random_f1_macro</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1 Macro for model predictions: &quot;</span><span class="p">,</span> <span class="n">f1_macro</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="p">(</span><span class="n">f1_macro</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">random_f1_macro</span><span class="o">.</span><span class="n">item</span><span class="p">()),</span> <span class="n">tick_label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="s2">&quot;Random&quot;</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;salmon&quot;</span><span class="p">,</span> <span class="s2">&quot;skyblue&quot;</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;F1 Macro&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great! We were able to achieve better-than-chance results in terms of F1-Macro and Balanced Accuracy! Let’s look at the results for individual classes and see which phonemes we were able to perform well on.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_class_specific_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">random_scores</span><span class="p">,</span> <span class="n">metric_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+
+    <span class="c1"># If sorting is requested, reorder the bars based on the criteria.</span>
+    <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+
+    <span class="c1"># Reorder the arrays along the class dimension (axis=1) and update the summary statistics</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+    <span class="n">random_scores</span> <span class="o">=</span> <span class="n">random_scores</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">]</span>
+    <span class="c1"># Positions of the groups on the x-axis</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="c1"># Width of each bar</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mf">0.35</span>
+
+    <span class="c1"># Create a figure and axis</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+    <span class="c1"># Plot Random scores bars</span>
+    <span class="n">bars1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_scores</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Plot Actual score bars</span>
+    <span class="n">bars2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Add labels and title</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Phonemes&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">metric_name</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">metric_name</span> <span class="o">+</span> <span class="s2">&quot; for each Phoneme&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Set x-axis tick labels</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="c1"># Add legend</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+    <span class="c1"># Add grid for better readability</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+    <span class="c1"># Adjust layout to prevent clipping of tick-labels</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Display the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_class_specific_scores</span><span class="p">(</span><span class="n">scores</span><span class="o">=</span><span class="n">f1_by_class</span><span class="p">,</span> <span class="n">random_scores</span><span class="o">=</span><span class="n">random_f1_by_class</span><span class="p">,</span> <span class="n">metric_name</span><span class="o">=</span><span class="s2">&quot;F1&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">val_dataset</span><span class="o">.</span><span class="n">labels_sorted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="that-s-it">
+<h2>That’s it! 🥳<a class="headerlink" href="#that-s-it" title="Link to this heading">#</a></h2>
+<p>You’ve successfully trained a model that significantly outperforms random guessing in phoneme classification from MEG data - congrats! Thanks for taking the time to look at and/or participate in our competition. If you have any open questions, get in touch on <a class="reference external" href="https://neural-processing-lab.github.io/2025-libribrain-competition/links/discord">our Discord server</a>!
+Once you’re ready to get your score on the leaderboard, take a look at the <a class="reference external" href="https://neural-processing-lab.github.io/2025-libribrain-competition/links/submission-colab">submission tutorial</a>. You might also want to take another look at the <a class="reference external" href="https://neural-processing-lab.github.io/2025-libribrain-competition">competition website</a>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="LibriBrain_Competition_Speech_Detection.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Speech Detection (LibriBrain)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-dependencies">Setting up dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-dataset">Preparing the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-task-phoneme-classification">The task: Phoneme Classification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-signal-averaging-the-training-data">Important: Signal averaging the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-model">Defining the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#actually-training">Actually training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validating-our-results">Validating our results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#that-s-it">That’s it! 🥳</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Neural Processing Lab
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

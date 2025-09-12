@@ -1,0 +1,54 @@
+################################################################################
+# Jupyter Book configuration
+################################################################################
+
+title: PNPL
+author: Neural Processing Lab
+logo: pnpl-wordmark.png
+only_build_toc_files: false
+
+repository:
+  url: https://github.com/neural-processing-lab/pnpl-public
+  path_to_book: docs
+  branch: main
+
+html:
+  favicon: pnpl-logo.png
+  use_repository_button: true
+  use_issues_button: true
+  use_edit_page_button: true
+  extra_navbar: "PNPL public package"
+  extra_footer: "© Neural Processing Lab"
+  extra_css:
+    - _static/custom.css
+
+execute:
+  execute_notebooks: off
+
+parse:
+  myst_enable_extensions:
+    - colon_fence
+    - deflist
+    - dollarmath
+    - html_image
+    - linkify
+    - substitution
+
+sphinx:
+  extra_extensions:
+    - sphinx.ext.autodoc
+    - sphinx.ext.autosummary
+    - sphinx.ext.napoleon
+    - sphinx.ext.viewcode
+  config:
+    autosummary_generate: true
+    autodoc_typehints: description
+    napoleon_numpy_docstring: true
+    napoleon_google_docstring: true
+    napoleon_include_init_with_doc: true
+    napoleon_use_param: true
+    napoleon_use_rtype: true
+    html_theme_options:
+      navigation_depth: 4
+      show_nav_level: 2
+      collapse_navigation: false

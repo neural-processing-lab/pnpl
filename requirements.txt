@@ -1,0 +1,7 @@
+mne
+mne_bids
+numpy
+pandas
+torch
+h5py
+huggingface_hub

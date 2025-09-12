@@ -1,0 +1,102 @@
+/* Override theme variables for both light & dark modes */
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  /* Primary brand color overrides (Jupyter Book / pydata-sphinx-theme) */
+  --pst-color-primary: #6b7280;           /* mid grey */
+  --pst-color-primary-text: #ffffff;      /* text on primary */
+  --pst-color-link: #6b7280;              /* link color */
+  --pst-color-link-hover: #374151;        /* darker grey on hover */
+  --pst-color-secondary: #6b7280;
+
+  /* Bootstrap variables used by theme */
+  --bs-primary: #6b7280;
+  --bs-primary-rgb: 107, 114, 128; /* 6b7280 */
+  --bs-link-color: #6b7280;
+  --bs-link-hover-color: #374151;
+
+  /* Sphinx-design button colors */
+  --sd-color-primary: #6b7280;
+  --sd-color-primary-text: #ffffff;
+}
+
+/* Navbar links */
+.navbar .navbar-nav .nav-link,
+.bd-header .navbar .nav-link {
+  color: var(--bs-link-color) !important;
+}
+
+/* Optional: tweak active/hover states in navbar */
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active,
+.bd-sidebar .nav .active > .nav-link,
+.bd-sidebar .nav .nav-link:hover {
+  color: var(--pst-color-link-hover) !important;
+}
+
+a { color: var(--pst-color-link) !important; }
+a:hover { color: var(--pst-color-link-hover) !important; }
+
+/* Feature grid on landing page */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2rem 0;
+}
+
+.feature-card {
+  position: relative;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55))
+              , radial-gradient(1200px 400px at 0% 0%, rgba(107,114,128,0.10), transparent)
+              , radial-gradient(900px 300px at 100% 100%, rgba(55,65,81,0.10), transparent);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+
+.feature-card:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(0,0,0,0.10); }
+.feature-card h3 { margin: 0 0 .35rem 0; font-weight: 700; }
+.feature-card p { margin: 0; color: #111827; }
+.feature-card .kicker { text-transform: uppercase; letter-spacing: .06em; font-size: .72rem; color: #6b7280; margin-bottom: .2rem; }
+
+.feature-card a.stretched { position: absolute; inset: 0; border-radius: 14px; }
+
+/* Buttons and active pills */
+.btn-primary,
+.sd-btn.sd-btn-primary,
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+  color: var(--pst-color-primary-text) !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background-color: var(--bs-primary) !important;
+}
+
+/* Force link colors across content areas */
+.bd-content a,
+.bd-content a:visited,
+.reference.internal,
+.reference.external,
+.sidebar .nav-link,
+.bd-sidebar .nav .nav-link {
+  color: #6b7280 !important;
+}
+
+.bd-content a:hover,
+.bd-content a:focus,
+.reference.internal:hover,
+.reference.external:hover,
+.bd-sidebar .nav .nav-link:hover,
+.bd-sidebar .nav .active > .nav-link {
+  color: #374151 !important;
+  text-decoration-color: #374151 !important;
+  background: none !important;
+}

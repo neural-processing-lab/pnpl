@@ -1,0 +1,6 @@
+**/__pycache__
+.vscode/
+*.egg-info/
+scripts/*
+.DS_Store
+.idea

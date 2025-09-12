@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme &#8212; PNPL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=859acbfe" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme';</script>
+    <link rel="icon" href="../../_static/pnpl-logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pnpl.datasets.grouped_dataset.GroupedDataset" href="pnpl.datasets.grouped_dataset.GroupedDataset.html" />
+    <link rel="prev" title="pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech" href="pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pnpl-wordmark.png" class="logo__image only-light" alt="PNPL - Home"/>
+    <script>document.write(`<img src="../../_static/pnpl-wordmark.png" class="logo__image only-dark" alt="PNPL - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Public Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libribrain.html">LibriBrain</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../LibriBrain_Competition_Speech_Detection.html">Speech Detection (LibriBrain)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LibriBrain_Competition_Phoneme_Classification.html">Phoneme Classification (LibriBrain)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html">pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pnpl.datasets.grouped_dataset.GroupedDataset.html">pnpl.datasets.grouped_dataset.GroupedDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pnpl.datasets.hdf5.dataset.HDF5Dataset.html">pnpl.datasets.hdf5.dataset.HDF5Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pnpl.datasets.libribrain2025.constants.html">pnpl.datasets.libribrain2025.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pnpl.datasets.libribrain2025.constants_utils.html">pnpl.datasets.libribrain2025.constants_utils</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api/generated/pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme"><code class="docutils literal notranslate"><span class="pre">LibriBrainPhoneme</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__"><code class="docutils literal notranslate"><span class="pre">LibriBrainPhoneme.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pnpl-datasets-libribrain2025-phoneme-dataset-libribrainphoneme">
+<h1>pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme<a class="headerlink" href="#pnpl-datasets-libribrain2025-phoneme-dataset-libribrainphoneme" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pnpl.datasets.libribrain2025.phoneme_dataset.</span></span><span class="sig-name descname"><span class="pre">LibriBrainPhoneme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'phoneme'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessing_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bads+headpos+sss+notch+bp+ds'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_run_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_run_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipping_boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_means</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preload_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pnpl/datasets/libribrain2025/phoneme_dataset.html#LibriBrainPhoneme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>str</em>)</p></li>
+<li><p><strong>partition</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>label_type</strong> (<em>str</em>)</p></li>
+<li><p><strong>preprocessing_str</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tmin</strong> (<em>float</em>)</p></li>
+<li><p><strong>tmax</strong> (<em>float</em>)</p></li>
+<li><p><strong>include_run_keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>exclude_run_keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>exclude_tasks</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>standardize</strong> (<em>bool</em>)</p></li>
+<li><p><strong>clipping_boundary</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>channel_means</strong> (<em>ndarray</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>channel_stds</strong> (<em>ndarray</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>include_info</strong> (<em>bool</em>)</p></li>
+<li><p><strong>preload_files</strong> (<em>bool</em>)</p></li>
+<li><p><strong>download</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'phoneme'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessing_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bads+headpos+sss+notch+bp+ds'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_run_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_run_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipping_boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_means</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_stds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preload_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pnpl/datasets/libribrain2025/phoneme_dataset.html#LibriBrainPhoneme.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__" title="Link to this definition">#</a></dt>
+<dd><p>LibriBrain phoneme classification dataset.</p>
+<p>This dataset provides MEG data aligned to phoneme onsets for phoneme classification tasks.
+Each sample contains MEG data from tmin to tmax seconds relative to a phoneme onset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>str</em>) – Path where you wish to store the dataset. The local dataset structure
+will follow the same BIDS-like structure as the HuggingFace repo:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">data_path/</span>
+<span class="pre">├──</span> <span class="pre">{task}/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">e.g.,</span> <span class="pre">&quot;Sherlock1&quot;</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">derivatives/</span>
+<span class="pre">│</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">├──</span> <span class="pre">serialised/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">MEG</span> <span class="pre">data</span> <span class="pre">files</span>
+<span class="pre">│</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">sub-{subject}_ses-{session}_task-{task}_run-{run}_proc-{preprocessing_str}_meg.h5</span>
+<span class="pre">│</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">└──</span> <span class="pre">events/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Event</span> <span class="pre">timing</span> <span class="pre">files</span>
+<span class="pre">│</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">└──</span> <span class="pre">sub-{subject}_ses-{session}_task-{task}_run-{run}_events.tsv</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>partition</strong> (<em>str</em><em> | </em><em>None</em>) – Convenient shortcut to specify train/validation/test split. Use “train”,
+“validation”, or “test”. Instead of specifying run keys manually, you can use:
+- partition=”train”: All runs except validation and test
+- partition=”validation”: (‘0’, ‘11’, ‘Sherlock1’, ‘2’)
+- partition=”test”: (‘0’, ‘12’, ‘Sherlock1’, ‘2’)</p></li>
+<li><p><strong>label_type</strong> (<em>str</em>) – <p>Type of labels to return. Options:
+- “phoneme”: Return phoneme labels (e.g., ‘aa’, ‘ae’, ‘ah’, etc.)
+- “voicing”: Return voicing labels derived from phonemes indicating voiced</p>
+<blockquote>
+<div><p>vs unvoiced phonemes. See <a class="reference external" href="https://en.wikipedia.org/wiki/Voice_(phonetics">https://en.wikipedia.org/wiki/Voice_(phonetics</a>)</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>preprocessing_str</strong> (<em>str</em><em> | </em><em>None</em>) – By default, we expect files with preprocessing string
+“bads+headpos+sss+notch+bp+ds”. This indicates the preprocessing steps:
+bads+headpos+sss+notch+bp+ds means the data has been processed for
+bad channel removal, head position adjustment, signal-space separation,
+notch filtering, bandpass filtering, and downsampling.</p></li>
+<li><p><strong>tmin</strong> (<em>float</em>) – Start time of the sample in seconds relative to phoneme onset. For a phoneme
+at time T, you grab MEG data from T + tmin up to T + tmax.</p></li>
+<li><p><strong>tmax</strong> (<em>float</em>) – End time of the sample in seconds relative to phoneme onset. The number of
+timepoints per sample = int((tmax - tmin) * sfreq) where sfreq=250Hz.</p></li>
+<li><p><strong>include_run_keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of specific sessions to include. Format per session:
+(‘0’, ‘1’, ‘Sherlock1’, ‘1’) = Subject 0, Session 1, Task Sherlock1, Run 1.
+You can see all valid run keys by importing RUN_KEYS from
+pnpl.datasets.libribrain2025.constants.</p></li>
+<li><p><strong>exclude_run_keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of sessions to exclude (same format as include_run_keys).</p></li>
+<li><p><strong>exclude_tasks</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of task names to exclude (e.g., [‘Sherlock1’]).</p></li>
+<li><p><strong>standardize</strong> (<em>bool</em>) – Whether to z-score normalize each channel’s MEG data using mean and std
+computed across all included runs.
+Formula: normalized_data[channel] = (raw_data[channel] - channel_mean[channel]) / channel_std[channel]</p></li>
+<li><p><strong>clipping_boundary</strong> (<em>float</em><em> | </em><em>None</em>) – If specified, clips all values to [-clipping_boundary, clipping_boundary].
+This can help with outliers. Set to None for no clipping.</p></li>
+<li><p><strong>channel_means</strong> (<em>ndarray</em><em> | </em><em>None</em>) – Pre-computed channel means for standardization. If provided along with
+channel_stds, these will be used instead of computing from the dataset.</p></li>
+<li><p><strong>channel_stds</strong> (<em>ndarray</em><em> | </em><em>None</em>) – Pre-computed channel standard deviations for standardization.</p></li>
+<li><p><strong>include_info</strong> (<em>bool</em>) – Whether to include additional info dict in each sample containing dataset name,
+subject, session, task, run, onset time, and full phoneme label (including
+word position indicators).</p></li>
+<li><p><strong>preload_files</strong> (<em>bool</em>) – Whether to “eagerly” download all dataset files from HuggingFace when
+the dataset object is created (True) or “lazily” download files on demand (False).
+We recommend leaving this as True unless you have a specific reason not to.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Whether to download files from HuggingFace if not found locally (True) or
+throw an error if files are missing locally (False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Data samples with shape (channels, time) where channels=306 MEG channels.
+Labels are integers corresponding to phoneme or voicing classes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__" title="pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(data_path[, partition, label_type, ...])</p></td>
+<td><p>LibriBrain phoneme classification dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_file_download</span></code>(fpath, data_path)</p></td>
+<td><p>Class method to download a file using the sophisticated LibriBrain download system without requiring dataset instantiation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_phonemes_from_tsv</span></code>(subject, session, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefetch_files</span></code>([get_event_files])</p></td>
+<td><p>Preload all required files in parallel.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./api/generated"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="pnpl.datasets.grouped_dataset.GroupedDataset.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pnpl.datasets.grouped_dataset.GroupedDataset</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme"><code class="docutils literal notranslate"><span class="pre">LibriBrainPhoneme</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.__init__"><code class="docutils literal notranslate"><span class="pre">LibriBrainPhoneme.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Neural Processing Lab
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

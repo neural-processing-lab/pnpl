@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pnpl.datasets.libribrain2025.speech_dataset &#8212; PNPL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=859acbfe" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pnpl/datasets/libribrain2025/speech_dataset';</script>
+    <link rel="icon" href="../../../../_static/pnpl-logo.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/pnpl-wordmark.png" class="logo__image only-light" alt="PNPL - Home"/>
+    <script>document.write(`<img src="../../../../_static/pnpl-wordmark.png" class="logo__image only-dark" alt="PNPL - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../datasets.html">Public Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../libribrain.html">LibriBrain</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../LibriBrain_Competition_Speech_Detection.html">Speech Detection (LibriBrain)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../LibriBrain_Competition_Phoneme_Classification.html">Phoneme Classification (LibriBrain)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html">pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme.html">pnpl.datasets.libribrain2025.phoneme_dataset.LibriBrainPhoneme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.grouped_dataset.GroupedDataset.html">pnpl.datasets.grouped_dataset.GroupedDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.hdf5.dataset.HDF5Dataset.html">pnpl.datasets.hdf5.dataset.HDF5Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.libribrain2025.constants.html">pnpl.datasets.libribrain2025.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/generated/pnpl.datasets.libribrain2025.constants_utils.html">pnpl.datasets.libribrain2025.constants_utils</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code_of_conduct.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pnpl.datasets.libribrain2025.speech_dataset</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pnpl.datasets.libribrain2025.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">LibriBrainBase</span>
+
+
+<div class="viewcode-block" id="LibriBrainSpeech">
+<a class="viewcode-back" href="../../../../api/generated/pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html#pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LibriBrainSpeech</span><span class="p">(</span><span class="n">LibriBrainBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LibriBrainSpeech.__init__">
+<a class="viewcode-back" href="../../../../api/generated/pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.html#pnpl.datasets.libribrain2025.speech_dataset.LibriBrainSpeech.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">partition</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">preprocessing_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;bads+headpos+sss+notch+bp+ds&quot;</span><span class="p">,</span>
+        <span class="n">tmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">tmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">include_run_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">exclude_run_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">exclude_tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">standardize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">clipping_boundary</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">channel_means</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">channel_stds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">include_info</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">oversample_silence_jitter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">preload_files</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        LibriBrain speech vs silence classification dataset.</span>
+
+<span class="sd">        This dataset provides MEG data segmented into time windows for binary classification of </span>
+<span class="sd">        speech vs silence. The dataset slides a time window across the continuous MEG data and </span>
+<span class="sd">        labels each window based on whether it contains predominantly speech or silence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_path: Path where you wish to store the dataset. The local dataset structure </span>
+<span class="sd">                      will follow the same BIDS-like structure as the HuggingFace repo:</span>
+<span class="sd">                      ```</span>
+<span class="sd">                      data_path/</span>
+<span class="sd">                      ├── {task}/                    # e.g., &quot;Sherlock1&quot;</span>
+<span class="sd">                      │   └── derivatives/</span>
+<span class="sd">                      │       ├── serialised/       # MEG data files</span>
+<span class="sd">                      │       │   └── sub-{subject}_ses-{session}_task-{task}_run-{run}_proc-{preprocessing_str}_meg.h5</span>
+<span class="sd">                      │       └── events/            # Event files  </span>
+<span class="sd">                      │           └── sub-{subject}_ses-{session}_task-{task}_run-{run}_events.tsv</span>
+<span class="sd">                      ```</span>
+<span class="sd">            partition: Convenient shortcut to specify train/validation/test split. Use &quot;train&quot;, </span>
+<span class="sd">                      &quot;validation&quot;, or &quot;test&quot;. Instead of specifying run keys manually, you can use:</span>
+<span class="sd">                      - partition=&quot;train&quot;: All runs except validation and test</span>
+<span class="sd">                      - partition=&quot;validation&quot;: (&#39;0&#39;, &#39;11&#39;, &#39;Sherlock1&#39;, &#39;2&#39;) </span>
+<span class="sd">                      - partition=&quot;test&quot;: (&#39;0&#39;, &#39;12&#39;, &#39;Sherlock1&#39;, &#39;2&#39;)</span>
+<span class="sd">            preprocessing_str: By default, we expect files with preprocessing string </span>
+<span class="sd">                             &quot;bads+headpos+sss+notch+bp+ds&quot;. This indicates the preprocessing steps:</span>
+<span class="sd">                             bads+headpos+sss+notch+bp+ds means the data has been processed for </span>
+<span class="sd">                             bad channel removal, head position adjustment, signal-space separation, </span>
+<span class="sd">                             notch filtering, bandpass filtering, and downsampling.</span>
+<span class="sd">            tmin: Start time of the sample in seconds relative to the sliding window start. </span>
+<span class="sd">                 Together with tmax, defines the time window size for each sample.</span>
+<span class="sd">            tmax: End time of the sample in seconds relative to the sliding window start. </span>
+<span class="sd">                 The number of timepoints per sample = int((tmax - tmin) * sfreq) where sfreq=250Hz.</span>
+<span class="sd">                 E.g., tmin=0, tmax=0.8 yields 200 timepoints per sample.</span>
+<span class="sd">            include_run_keys: List of specific sessions to include. Format per session: </span>
+<span class="sd">                            (&#39;0&#39;, &#39;1&#39;, &#39;Sherlock1&#39;, &#39;1&#39;) = Subject 0, Session 1, Task Sherlock1, Run 1.</span>
+<span class="sd">                            You can see all valid run keys by importing RUN_KEYS from </span>
+<span class="sd">                            pnpl.datasets.libribrain2025.constants.</span>
+<span class="sd">            exclude_run_keys: List of sessions to exclude (same format as include_run_keys).</span>
+<span class="sd">            exclude_tasks: List of task names to exclude (e.g., [&#39;Sherlock1&#39;]).</span>
+<span class="sd">            standardize: Whether to z-score normalize each channel&#39;s MEG data using mean and std </span>
+<span class="sd">                        computed across all included runs.</span>
+<span class="sd">                        Formula: normalized_data[channel] = (raw_data[channel] - channel_mean[channel]) / channel_std[channel]</span>
+<span class="sd">            clipping_boundary: If specified, clips all values to [-clipping_boundary, clipping_boundary]. </span>
+<span class="sd">                             This can help with outliers. Set to None for no clipping.</span>
+<span class="sd">            channel_means: Pre-computed channel means for standardization. If provided along with </span>
+<span class="sd">                          channel_stds, these will be used instead of computing from the dataset.</span>
+<span class="sd">            channel_stds: Pre-computed channel standard deviations for standardization.</span>
+<span class="sd">            include_info: Whether to include additional info dict in each sample containing dataset name, </span>
+<span class="sd">                         subject, session, task, run, and onset time of the sample.</span>
+<span class="sd">            oversample_silence_jitter: Since the dataset is quite unbalanced (more speech than silence), </span>
+<span class="sd">                                     you may wish to oversample the silent portions during training. This </span>
+<span class="sd">                                     parameter allows you to specify a different stride for silent portions only, </span>
+<span class="sd">                                     effectively oversampling them. Set to 0 for no oversampling.</span>
+<span class="sd">            preload_files: Whether to &quot;eagerly&quot; download all dataset files from HuggingFace when </span>
+<span class="sd">                          the dataset object is created (True) or &quot;lazily&quot; download files on demand (False). </span>
+<span class="sd">                          We recommend leaving this as True unless you have a specific reason not to.</span>
+<span class="sd">            stride: Controls how far (in time) you move the sliding window between consecutive samples. </span>
+<span class="sd">                   Instead of jumping exactly one full time_window_samples worth (tmax-tmin; the default) </span>
+<span class="sd">                   each time, you can specify a smaller stride to get overlapping windows. If None, </span>
+<span class="sd">                   defaults to time_window_samples (no overlap).</span>
+<span class="sd">            download: Whether to download files from HuggingFace if not found locally (True) or </span>
+<span class="sd">                     throw an error if files are missing locally (False).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Data samples with shape (channels, time) where channels=306 MEG channels.</span>
+<span class="sd">            Labels are arrays indicating speech (1) vs silence (0) for each timepoint in the sample.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+            <span class="n">partition</span><span class="o">=</span><span class="n">partition</span><span class="p">,</span>
+            <span class="n">preprocessing_str</span><span class="o">=</span><span class="n">preprocessing_str</span><span class="p">,</span>
+            <span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span>
+            <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span>
+            <span class="n">include_run_keys</span><span class="o">=</span><span class="n">include_run_keys</span><span class="p">,</span>
+            <span class="n">exclude_run_keys</span><span class="o">=</span><span class="n">exclude_run_keys</span><span class="p">,</span>
+            <span class="n">exclude_tasks</span><span class="o">=</span><span class="n">exclude_tasks</span><span class="p">,</span>
+            <span class="n">standardize</span><span class="o">=</span><span class="n">standardize</span><span class="p">,</span>
+            <span class="n">clipping_boundary</span><span class="o">=</span><span class="n">clipping_boundary</span><span class="p">,</span>
+            <span class="n">channel_means</span><span class="o">=</span><span class="n">channel_means</span><span class="p">,</span>
+            <span class="n">channel_stds</span><span class="o">=</span><span class="n">channel_stds</span><span class="p">,</span>
+            <span class="n">include_info</span><span class="o">=</span><span class="n">include_info</span><span class="p">,</span>
+            <span class="n">preload_files</span><span class="o">=</span><span class="n">preload_files</span><span class="p">,</span>
+            <span class="n">download</span><span class="o">=</span><span class="n">download</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oversample_silence_jitter</span> <span class="o">=</span> <span class="n">oversample_silence_jitter</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">run_keys_missing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">run_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">intended_run_keys</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span> <span class="o">=</span> <span class="n">run_key</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speech_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_speech_silence_labels_for_session</span><span class="p">(</span>
+                    <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversample_silence_jitter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_collect_speech_over_samples</span><span class="p">(</span>
+                        <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversample_silence_jitter</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_collect_speech_samples</span><span class="p">(</span>
+                        <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_labels</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stride</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">run_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_key</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="n">run_keys_missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_key</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;File not found for run key </span><span class="si">{</span><span class="n">run_key</span><span class="si">}</span><span class="s2">. Skipping&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">run_keys_missing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Run keys </span><span class="si">{</span><span class="n">run_keys_missing</span><span class="si">}</span><span class="s2"> not found in dataset. Present run keys: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No samples found.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standardize</span> <span class="ow">and</span> <span class="n">channel_means</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">channel_stds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_standardization_params</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standardize</span> <span class="ow">and</span> <span class="p">(</span><span class="n">channel_means</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">channel_stds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">channel_means</span> <span class="o">=</span> <span class="n">channel_means</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">channel_stds</span> <span class="o">=</span> <span class="n">channel_stds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">broadcasted_stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">channel_stds</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_per_sample</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">broadcasted_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">channel_means</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_per_sample</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_speech_silence_labels_for_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_events</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span>
+
+        <span class="c1"># Convert times to samples, handling errors</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;timemeg&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;duration_samples&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Filter for silence and word entries</span>
+        <span class="n">silence_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;kind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;silence&#39;</span><span class="p">]</span>
+        <span class="n">words_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;kind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;word&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">silence_df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">silence_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="n">silence_df</span><span class="p">[</span>
+            <span class="s1">&#39;duration_samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: No valid silence entries found. Returning None.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">words_df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">words_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="n">words_df</span><span class="p">[</span><span class="s1">&#39;duration_samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: No valid word entries found. Returning None.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">words_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;kind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;word&#39;</span><span class="p">]</span>
+
+        <span class="n">max_word_sample_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">words_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span> <span class="o">+</span>
+                                <span class="n">words_df</span><span class="p">[</span><span class="s1">&#39;duration_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">max_silence_sample_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">silence_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span> <span class="o">+</span>
+                                   <span class="n">silence_df</span><span class="p">[</span><span class="s1">&#39;duration_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">min_word_sample_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">words_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+        <span class="n">min_silence_sample_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">silence_df</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+        <span class="c1"># Create the array, initialize with 1s (assuming everything is speech initially)</span>
+        <span class="n">speech_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">max_word_sample_time</span><span class="p">,</span> <span class="n">max_silence_sample_time</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="c1"># Determine the minimum annotated sample time</span>
+        <span class="n">min_sample_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_word_sample_time</span><span class="p">,</span> <span class="n">min_silence_sample_time</span><span class="p">)</span>
+        <span class="c1"># Set to silence before we get any label</span>
+        <span class="n">speech_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">min_sample_time</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Fill in 0s for silence spans (adjusted for the offset)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">silence_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">start_sample</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;timemeg_samples&#39;</span><span class="p">]</span>
+            <span class="n">duration_samples</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;duration_samples&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">start_sample</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">duration_samples</span><span class="p">):</span>
+                <span class="n">end_sample</span> <span class="o">=</span> <span class="n">start_sample</span> <span class="o">+</span> <span class="n">duration_samples</span>
+                <span class="n">speech_labels</span><span class="p">[</span><span class="n">start_sample</span><span class="p">:</span><span class="n">end_sample</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">speech_labels</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_collect_speech_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">speech_labels</span><span class="p">,</span> <span class="n">stride</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Calculate the number of samples in the time window</span>
+        <span class="n">time_window_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stride</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stride</span> <span class="o">=</span> <span class="n">time_window_samples</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">speech_labels</span><span class="p">),</span> <span class="n">stride</span><span class="p">):</span>
+            <span class="n">sample_labels</span> <span class="o">=</span> <span class="n">speech_labels</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">time_window_samples</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_labels</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time_window_samples</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">i</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">,</span> <span class="n">sample_labels</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_collect_speech_over_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">speech_labels</span><span class="p">,</span> <span class="n">silence_jitter</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">over_sample_category</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Calculate the number of samples in the time window</span>
+        <span class="n">time_window_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">)</span>
+
+        <span class="c1"># first collect the normal samples</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">speech_labels</span><span class="p">),</span> <span class="n">time_window_samples</span><span class="p">):</span>
+            <span class="n">sample_labels</span> <span class="o">=</span> <span class="n">speech_labels</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">time_window_samples</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_labels</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time_window_samples</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">i</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">,</span> <span class="n">sample_labels</span><span class="p">))</span>
+
+        <span class="c1"># now collect the over samples</span>
+        <span class="n">samples_step_size</span> <span class="o">=</span> <span class="n">time_window_samples</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segments_with_speech_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">jitter_around_silence</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># Make sure to jitter around silence whenever a silence is found in the samples iteration</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">speech_labels</span><span class="p">):</span>
+            <span class="n">speech_label_segment</span> <span class="o">=</span> <span class="n">speech_labels</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">time_window_samples</span><span class="p">]</span>
+            <span class="c1"># found rare silence, iterate sample at a time to oversample silence</span>
+            <span class="k">if</span> <span class="n">speech_label_segment</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">time_window_samples</span> <span class="ow">and</span> <span class="n">jitter_around_silence</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">jitter_around_silence</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">first_zero_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">speech_label_segment</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="p">((</span><span class="n">time_window_samples</span> <span class="o">-</span> <span class="n">first_zero_index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">samples_step_size</span> <span class="o">=</span> <span class="n">silence_jitter</span>
+            <span class="c1"># back to no silence, so let&#39;s go back to 200 sampling rate step size</span>
+            <span class="k">if</span> <span class="n">speech_label_segment</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="n">time_window_samples</span> <span class="ow">and</span> <span class="n">jitter_around_silence</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">samples_step_size</span> <span class="o">=</span> <span class="n">time_window_samples</span>
+                <span class="n">jitter_around_silence</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="n">sample_labels</span> <span class="o">=</span> <span class="n">speech_labels</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">time_window_samples</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_labels</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time_window_samples</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">samples_step_size</span>
+
+            <span class="k">if</span> <span class="n">over_sample_category</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="mf">0.3</span> <span class="o">&lt;</span> <span class="n">sample_labels</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sample_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">i</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">,</span> <span class="n">sample_labels</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">sample_labels</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">i</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfreq</span><span class="p">,</span> <span class="n">sample_labels</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># returns channels x time</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">label</span><span class="p">),</span> <span class="n">info</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">LibriBrainSpeech</span><span class="p">(</span>
+        <span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;/Users/gilad/Desktop/Projects/PNPL/LibriBrain/serialized&quot;</span><span class="p">,</span>
+        <span class="n">preprocessing_str</span><span class="o">=</span><span class="s2">&quot;bads+headpos+sss+notch+bp+ds&quot;</span><span class="p">,</span>
+        <span class="n">exclude_run_keys</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+                          <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">]],</span>
+        <span class="n">include_run_keys</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span>
+                          <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span>
+                              <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span>
+                          <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="p">[</span>
+                              <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span>
+                          <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;Sherlock1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]],</span>
+    <span class="p">)</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+    <span class="n">label_counts</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">label_counts</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">label_counts</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Neural Processing Lab
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+jupyter-book>=1.0.0
+ipywidgets
+numpy
+pandas
+torch
+h5py
+mne
+mne-bids
+huggingface_hub

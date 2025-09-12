@@ -1,0 +1,24 @@
+format: jb-book
+root: index
+parts:
+  - caption: Get Started
+    chapters:
+      - file: install
+      - file: quickstart
+      - file: datasets
+      - file: libribrain
+  - caption: Tutorials
+    chapters:
+      - file: LibriBrain_Competition_Speech_Detection.ipynb
+        title: Speech Detection (LibriBrain)
+      - file: LibriBrain_Competition_Phoneme_Classification.ipynb
+        title: Phoneme Classification (LibriBrain)
+  - caption: Reference
+    chapters:
+      - file: api/index.md
+  - caption: Contribute
+    chapters:
+      - file: contributing
+      - file: development
+      - file: faq
+      - file: code_of_conduct
