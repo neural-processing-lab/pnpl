@@ -61,12 +61,11 @@ jobs:
           twine check dist/*
 
       - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@v1.10.0
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: dist
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: |
+          python -m twine upload --repository-url https://test.pypi.org/legacy/ --non-interactive dist/*
 
       - name: Smoke test install from TestPyPI
         env:
@@ -118,12 +117,22 @@ jobs:
           name: pnpl-dist-${{ needs.build-and-testpypi.outputs.version }}
           path: dist
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.10.0
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          packages-dir: dist
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          python-version: '3.11'
+
+      - name: Install upload dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install twine
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python -m twine upload --non-interactive dist/*
 
       - name: Create GitHub release
         uses: ncipollo/release-action@v1
