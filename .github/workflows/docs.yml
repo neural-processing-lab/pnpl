@@ -1,4 +1,4 @@
-name: Docs (disabled)
+name: Docs
 
 on:
   workflow_dispatch:
@@ -14,13 +14,11 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "Docs workflow temporarily disabled"
 
   deploy:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "Docs deployment temporarily disabled"
