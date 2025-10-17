@@ -1,0 +1,140 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 0.1.0)'
+        required: true
+
+permissions:
+  contents: write
+  id-token: read
+  packages: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build-and-testpypi:
+    name: Build package and publish to TestPyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi-release
+    outputs:
+      version: ${{ steps.validate-version.outputs.version }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate version input
+        id: validate-version
+        run: |
+          VERSION_INPUT="${{ inputs.version }}"
+          VERSION_FILE=$(python - <<'PY'
+import pathlib, re
+text = pathlib.Path('setup.py').read_text()
+match = re.search(r'version\s*=\s*[\"\']([^\"\']+)[\"\']', text)
+if not match:
+    raise SystemExit('Could not find version in setup.py')
+print(match.group(1))
+PY
+)
+          echo "Detected version: $VERSION_FILE"
+          if [ "$VERSION_INPUT" != "$VERSION_FILE" ]; then
+            echo "::error::Input version '$VERSION_INPUT' does not match setup.py version '$VERSION_FILE'"
+            exit 1
+          fi
+          echo "version=$VERSION_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build distribution artifacts
+        run: |
+          python -m build
+          twine check dist/*
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@v1.10.0
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: dist
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+      - name: Smoke test install from TestPyPI
+        env:
+          PACKAGE_VERSION: ${{ steps.validate-version.outputs.version }}
+        run: |
+          python -m venv /tmp/testpypi-venv
+          source /tmp/testpypi-venv/bin/activate
+          pip install --upgrade pip
+          pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple "pnpl==$PACKAGE_VERSION"
+
+      - name: Upload built artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pnpl-dist-${{ steps.validate-version.outputs.version }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish-production:
+    name: Tag release, publish to PyPI, and create GitHub release
+    needs: build-and-testpypi
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-release
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create and push tag
+        env:
+          VERSION: ${{ needs.build-and-testpypi.outputs.version }}
+        run: |
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "::error::Tag v$VERSION already exists"
+            exit 1
+          fi
+          git tag "v$VERSION" "$GITHUB_SHA"
+          git push origin "v$VERSION"
+
+      - name: Download built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpl-dist-${{ needs.build-and-testpypi.outputs.version }}
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.10.0
+        with:
+          packages-dir: dist
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ needs.build-and-testpypi.outputs.version }}
+          name: v${{ needs.build-and-testpypi.outputs.version }}
+          artifacts: "dist/*"
+          generateReleaseNotes: true
+          draft: false

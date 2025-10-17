@@ -48,7 +48,6 @@ phoneme_example_data = LibriBrainPhoneme(
     data_path="./data/",
     include_run_keys = [("0","1","Sherlock1","1")]
 )
-
 sample_data, label = phoneme_example_data[0]
 
 # Print out some basic info about the sample
