@@ -60,6 +60,26 @@ jobs:
           python -m build
           twine check dist/*
 
+      - name: Inspect built metadata
+        run: |
+          python -c "import pathlib, zipfile, textwrap; exec(textwrap.dedent('''\
+import pathlib
+import zipfile
+
+dist_path = pathlib.Path('dist')
+for wheel in sorted(dist_path.glob('*.whl')):
+    print(f'Inspecting {wheel.name}')
+    with zipfile.ZipFile(wheel) as zf:
+        metadata_files = [name for name in zf.namelist() if name.endswith('METADATA')]
+        if not metadata_files:
+            raise SystemExit('No METADATA file found in wheel')
+        data = zf.read(metadata_files[0]).decode('utf-8').splitlines()
+        print('First metadata lines:')
+        print('  ' + '\\n  '.join(data[:5]))
+for sdist in sorted(dist_path.glob('*.tar.gz')):
+    print(f'Found sdist {sdist.name}')
+'''))"
+
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@v1.10.0
         with:
