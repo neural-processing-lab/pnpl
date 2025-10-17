@@ -39,15 +39,7 @@ jobs:
         id: validate-version
         run: |
           VERSION_INPUT="${{ inputs.version }}"
-          VERSION_FILE=$(python - <<'PY'
-import pathlib, re
-text = pathlib.Path('setup.py').read_text()
-match = re.search(r'version\s*=\s*[\"\']([^\"\']+)[\"\']', text)
-if not match:
-    raise SystemExit('Could not find version in setup.py')
-print(match.group(1))
-PY
-)
+          VERSION_FILE=$(python -c 'import pathlib, re, sys; text = pathlib.Path("setup.py").read_text(); match = re.search(r"version\s*=\s*['"]([^'"]+)['"]", text); sys.exit("Could not find version in setup.py") if match is None else sys.stdout.write(match.group(1))')
           echo "Detected version: $VERSION_FILE"
           if [ "$VERSION_INPUT" != "$VERSION_FILE" ]; then
             echo "::error::Input version '$VERSION_INPUT' does not match setup.py version '$VERSION_FILE'"
