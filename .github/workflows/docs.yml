@@ -1,6 +1,15 @@
 name: Docs
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'pnpl/**'
+      - 'setup.py'
+      - 'requirements.txt'
+      - '.github/workflows/docs.yml'
+      - 'README.md'
   workflow_dispatch:
 
 permissions:
@@ -16,9 +25,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Docs workflow temporarily disabled"
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install -r docs/requirements.txt
+
+      - name: Build Jupyter Book
+        run: |
+          jupyter-book build docs/
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - run: echo "Docs deployment temporarily disabled"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
