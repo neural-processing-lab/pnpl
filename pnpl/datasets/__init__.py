@@ -16,7 +16,7 @@ _PUBLIC_MAP = {
     "LibriBrainSpeech": (
         "pnpl.datasets.libribrain2025.speech_dataset", "LibriBrainSpeech"
     ),
-    "LibriBrainSpeech": (
+    "LibriBrainWord": (
         "pnpl.datasets.libribrain2025.word_dataset", "LibriBrainWord"
     ),
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
