@@ -16,6 +16,9 @@ _PUBLIC_MAP = {
     "LibriBrainSpeech": (
         "pnpl.datasets.libribrain2025.speech_dataset", "LibriBrainSpeech"
     ),
+    "LibriBrainSpeech": (
+        "pnpl.datasets.libribrain2025.word_dataset", "LibriBrainWord"
+    ),
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
     "LibriBrainCompetitionHoldout": (
         "pnpl.datasets.libribrain2025.competition_holdout_dataset",
