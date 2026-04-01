@@ -23,5 +23,5 @@ def test_find_public_subpackages_without_importing_them():
     # The convenience names are listed via __dir__ without import
     import pnpl.datasets as ds
     listed = dir(ds)
-    for name in ['LibriBrainPhoneme', 'LibriBrainSpeech', 'GroupedDataset', 'LibriBrainCompetitionHoldout']:
+    for name in ['LibriBrain', 'LibriBrainPhoneme', 'LibriBrainSpeech', 'LibriBrainWord', 'LibriBrainSentence', 'GroupedDataset']:
         assert name in listed

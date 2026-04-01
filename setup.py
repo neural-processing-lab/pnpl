@@ -11,7 +11,8 @@ setup(
         "pandas",
         "torch",
         "h5py",
-        "huggingface_hub"
+        "huggingface_hub",
+        "requests",
     ],
     author="Dulhan Jayalath",
     author_email="dulhan@robots.ox.ac.uk",

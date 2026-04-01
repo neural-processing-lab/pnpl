@@ -4,6 +4,7 @@ from pnpl.datasets.libribrain2025.constants import PHONATION_BY_PHONEME
 import numpy as np
 import torch
 from pnpl.datasets.libribrain2025.base import LibriBrainBase
+from .constants import PHONEME_LABELS_SORTED
 
 
 class LibriBrainPhoneme(LibriBrainBase):
@@ -24,71 +25,22 @@ class LibriBrainPhoneme(LibriBrainBase):
         channel_means: np.ndarray | None = None,
         channel_stds: np.ndarray | None = None,
         include_info: bool = False,
-        preload_files: bool = True,
-        download: bool = True,
+        preload_files: bool = False,
     ):
         """
-        LibriBrain phoneme classification dataset.
+        data_path: path to serialized dataset. 
+        label_type: "phoneme" or "voicing". Voicing labels are derived from phoneme labels and indicate voiced and unvoiced phonemes. See https://en.wikipedia.org/wiki/Voice_(phonetics) for more information.
+        preprocessing_str: Preprocessing string in the file name. Indicates Preprocessing steps applied to the data.
+        tmin: start time of the sample in seconds in reference to the onset of the phoneme.
+        tmax: end time of the sample in seconds in reference to the onset of the phoneme.
+        standardize: Whether to standardize the data. Uses channel_means and channel_stds if provided. Otherwise it calculates mean and std for each channel of the dataset. 
+        clipping_boundary: Min and max values to clip the data by.
+        channel_means: Standardize using these channel means.
+        channel_stds: Standardize using these channel stds.
+        include_info: Whether to include info dict in the output. Info dict contains dataset name, subject, session, task, run, onset time of the sample, and full phoneme label that indicates if a phoneme is at the onset or offset of a word.
+        preload_files: If true start parallel downloads of all sessions and runs into data_path. Otherwise it will download files as they are needed.
 
-        This dataset provides MEG data aligned to phoneme onsets for phoneme classification tasks.
-        Each sample contains MEG data from tmin to tmax seconds relative to a phoneme onset.
-
-        Args:
-            data_path: Path where you wish to store the dataset. The local dataset structure 
-                      will follow the same BIDS-like structure as the HuggingFace repo:
-                      ```
-                      data_path/
-                      ├── {task}/                    # e.g., "Sherlock1"
-                      │   └── derivatives/
-                      │       ├── serialised/       # MEG data files
-                      │       │   └── sub-{subject}_ses-{session}_task-{task}_run-{run}_proc-{preprocessing_str}_meg.h5
-                      │       └── events/            # Event timing files  
-                      │           └── sub-{subject}_ses-{session}_task-{task}_run-{run}_events.tsv
-                      ```
-            partition: Convenient shortcut to specify train/validation/test split. Use "train", 
-                      "validation", or "test". Instead of specifying run keys manually, you can use:
-                      - partition="train": All runs except validation and test
-                      - partition="validation": ('0', '11', 'Sherlock1', '2') 
-                      - partition="test": ('0', '12', 'Sherlock1', '2')
-            label_type: Type of labels to return. Options:
-                       - "phoneme": Return phoneme labels (e.g., 'aa', 'ae', 'ah', etc.)
-                       - "voicing": Return voicing labels derived from phonemes indicating voiced 
-                         vs unvoiced phonemes. See https://en.wikipedia.org/wiki/Voice_(phonetics)
-            preprocessing_str: By default, we expect files with preprocessing string 
-                             "bads+headpos+sss+notch+bp+ds". This indicates the preprocessing steps:
-                             bads+headpos+sss+notch+bp+ds means the data has been processed for 
-                             bad channel removal, head position adjustment, signal-space separation, 
-                             notch filtering, bandpass filtering, and downsampling.
-            tmin: Start time of the sample in seconds relative to phoneme onset. For a phoneme 
-                 at time T, you grab MEG data from T + tmin up to T + tmax.
-            tmax: End time of the sample in seconds relative to phoneme onset. The number of 
-                 timepoints per sample = int((tmax - tmin) * sfreq) where sfreq=250Hz.
-            include_run_keys: List of specific sessions to include. Format per session: 
-                            ('0', '1', 'Sherlock1', '1') = Subject 0, Session 1, Task Sherlock1, Run 1.
-                            You can see all valid run keys by importing RUN_KEYS from 
-                            pnpl.datasets.libribrain2025.constants.
-            exclude_run_keys: List of sessions to exclude (same format as include_run_keys).
-            exclude_tasks: List of task names to exclude (e.g., ['Sherlock1']).
-            standardize: Whether to z-score normalize each channel's MEG data using mean and std 
-                        computed across all included runs.
-                        Formula: normalized_data[channel] = (raw_data[channel] - channel_mean[channel]) / channel_std[channel]
-            clipping_boundary: If specified, clips all values to [-clipping_boundary, clipping_boundary]. 
-                             This can help with outliers. Set to None for no clipping.
-            channel_means: Pre-computed channel means for standardization. If provided along with 
-                          channel_stds, these will be used instead of computing from the dataset.
-            channel_stds: Pre-computed channel standard deviations for standardization.
-            include_info: Whether to include additional info dict in each sample containing dataset name, 
-                         subject, session, task, run, onset time, and full phoneme label (including 
-                         word position indicators).
-            preload_files: Whether to "eagerly" download all dataset files from HuggingFace when 
-                          the dataset object is created (True) or "lazily" download files on demand (False). 
-                          We recommend leaving this as True unless you have a specific reason not to.
-            download: Whether to download files from HuggingFace if not found locally (True) or 
-                     throw an error if files are missing locally (False).
-
-        Returns:
-            Data samples with shape (channels, time) where channels=306 MEG channels.
-            Labels are integers corresponding to phoneme or voicing classes.
+        returns Channels x Time
         """
         super().__init__(
             data_path=data_path,
@@ -104,8 +56,7 @@ class LibriBrainPhoneme(LibriBrainBase):
             channel_means=channel_means,
             channel_stds=channel_stds,
             include_info=include_info,
-            preload_files=preload_files,
-            download=download,
+            preload_files=preload_files
         )
         supported_label_types = ["phoneme", "voicing"]
         if (label_type not in supported_label_types):
@@ -140,7 +91,8 @@ class LibriBrainPhoneme(LibriBrainBase):
         if len(self.samples) == 0:
             raise ValueError("No samples found.")
 
-        self.phonemes_sorted = self._get_unique_phoneme_labels()
+        self.phonemes_sorted = PHONEME_LABELS_SORTED
+
         self.phoneme_to_id = {label: i for i,
                               label in enumerate(self.phonemes_sorted)}
         self.id_to_phoneme = self.phonemes_sorted
@@ -158,14 +110,6 @@ class LibriBrainPhoneme(LibriBrainBase):
                 self.channel_stds, (self.points_per_sample, 1)).T
             self.broadcasted_means = np.tile(
                 self.channel_means, (self.points_per_sample, 1)).T
-
-    def _get_unique_phoneme_labels(self):
-        labels = set()
-        for i in range(len(self)):
-            labels.add(self.samples[i][5].split("_")[0])
-        labels = list(labels)
-        labels.sort()
-        return labels
 
     def load_phonemes_from_tsv(self, subject, session, task, run):
         events_df = self._load_events(subject, session, task, run)

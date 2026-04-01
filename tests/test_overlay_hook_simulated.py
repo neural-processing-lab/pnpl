@@ -17,11 +17,10 @@ def test_datasets_overlay_hook_via_private_exports(monkeypatch):
 def test_top_level_overlay_hook_via_private_exports(monkeypatch):
     import pnpl
 
-    mod = types.ModuleType('pnpl._private_exports')
+    mod = types.ModuleType('pnpl.datasets')
     mod.Bar = object()
-    monkeypatch.setitem(sys.modules, 'pnpl._private_exports', mod)
+    monkeypatch.setitem(sys.modules, 'pnpl.datasets', mod)
 
     # dir should now list Bar and getattr should return it lazily
     assert 'Bar' in dir(pnpl)
     assert getattr(pnpl, 'Bar') is mod.Bar
-

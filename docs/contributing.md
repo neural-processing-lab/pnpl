@@ -13,8 +13,8 @@ Thanks for your interest in improving PNPL! This guide helps you get set up, mak
 
 ## Development setup
 ```bash
-git clone https://github.com/neural-processing-lab/pnpl-public.git
-cd pnpl-public
+git clone https://github.com/neural-processing-lab/pnpl.git
+cd pnpl
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 pip install -r docs/requirements.txt  # if you build docs locally
@@ -47,4 +47,3 @@ open docs/_build/html/index.html
 - Label: bug/enhancement/docs where appropriate.
 
 Thanks for contributing!
-

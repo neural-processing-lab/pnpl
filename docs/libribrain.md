@@ -4,19 +4,38 @@ title: LibriBrain
 
 # LibriBrain
 
-The LibriBrain 2025 datasets provide MEG-based tasks with convenient download and caching from Hugging Face.
+The LibriBrain 2025 dataset family provides MEG-based speech and language tasks with download/caching support from Hugging Face.
 
 ## Common Arguments
 
 - `data_path`: local root where files are stored / downloaded
-- `preprocessing_str`: expected preprocessing string in filenames
-- `tmin`, `tmax`: window relative to event (seconds)
+- `preprocessing` / `preprocessing_str`: expected preprocessing string in filenames
 - `standardize`: z-score channels using per-run stats
 - `include_run_keys`: list of run keys to include (see constants.RUN_KEYS)
 - `include_info`: include an info dict in each sample
 - `download`: if True (default), fetch missing files via Hugging Face
 
-## Speech (binary time series)
+## Task-based entry point
+
+```python
+from pnpl.datasets import LibriBrain
+from pnpl.tasks import SpeechDetection
+
+ds = LibriBrain(
+    data_path="./data/LibriBrain",
+    task=SpeechDetection(tmin=0.0, tmax=0.2),
+    partition="train",
+    include_info=True,
+)
+
+print(len(ds))
+```
+
+The task object controls sample collection and label semantics. Public task classes live in `pnpl.tasks`.
+
+## Wrapper datasets
+
+### Speech (binary time series)
 
 ```python
 from pnpl.datasets import LibriBrainSpeech
@@ -34,9 +53,9 @@ ds = LibriBrainSpeech(
 print(len(ds))
 ```
 
-Each item returns `(data: float32[channels,time], labels: int[time], info: dict)`.
+Each item returns `(data: float32[channels,time], labels: int[time], info: dict)` when `include_info=True`.
 
-## Phoneme (classification)
+### Phoneme (classification)
 
 ```python
 from pnpl.datasets import LibriBrainPhoneme
@@ -53,3 +72,5 @@ print(len(ds))
 ```
 
 Each item returns `(data: float32[channels,time], label_id: int64)`.
+
+`LibriBrainWord` and `LibriBrainSentence` are also available as dataset-specific wrappers.

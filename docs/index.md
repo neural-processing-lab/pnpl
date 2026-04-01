@@ -7,7 +7,7 @@ title: PNPL
 PNPL is a friendly Python toolkit for loading and processing brain datasets for deep learning. It ships with ready‑to‑use dataset classes (PyTorch `Dataset`) and simple utilities so you can focus on modeling, not file plumbing.
 
 - [PyPI: `pnpl`](https://pypi.org/project/pnpl/)
-- [GitHub: Neural-Processing-Lab/pnpl](https://github.com/neural-processing-lab/pnpl-public)
+- [GitHub: Neural-Processing-Lab/pnpl](https://github.com/neural-processing-lab/pnpl)
 
 
 ## Get Started
@@ -18,20 +18,22 @@ PNPL is a friendly Python toolkit for loading and processing brain datasets for 
 pip install pnpl
 ```
 
-2) Load a single run of LibriBrain Speech and iterate samples
+2) Load LibriBrain with the task-based API
 
 ```python
-from pnpl.datasets.libribrain2025 import constants
-from pnpl.datasets import LibriBrainSpeech
+from pnpl.datasets import LibriBrain
+from pnpl.tasks import SpeechDetection
 
-ds = LibriBrainSpeech(
+ds = LibriBrain(
     data_path="./data/LibriBrain",
-    preprocessing_str="bads+headpos+sss+notch+bp+ds",
-    include_run_keys=[constants.RUN_KEYS[0]]
-    )
+    task=SpeechDetection(tmin=0.0, tmax=0.2),
+    partition="train",
+)
 x, y, info = ds[0]
 print(x.shape, y.shape)  # (channels,time), (time,)
 ```
+
+Wrapper classes such as `LibriBrainSpeech` and `LibriBrainPhoneme` are also available.
 
 ## Explore PNPL
 
