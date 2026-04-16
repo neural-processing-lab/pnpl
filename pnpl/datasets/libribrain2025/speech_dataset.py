@@ -26,7 +26,8 @@ class LibriBrainSpeech(LibriBrainBase):
         oversample_silence_jitter: int = 0,
         preload_files: bool = True,
         stride=None,
-        download: bool = True
+        download: bool = True,
+        preload_h5: bool = False
     ):
         """
         LibriBrain speech vs silence classification dataset.
@@ -111,7 +112,8 @@ class LibriBrainSpeech(LibriBrainBase):
             channel_stds=channel_stds,
             include_info=include_info,
             preload_files=preload_files,
-            download=download
+            download=download,
+            preload_h5=preload_h5
         )
 
         if not os.path.exists(data_path):

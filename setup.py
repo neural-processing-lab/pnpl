@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pnpl",
-    version="0.0.8",
+    version="0.0.9",
     packages=find_packages(),
     install_requires=[
         "mne",

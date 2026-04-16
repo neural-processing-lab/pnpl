@@ -39,7 +39,8 @@ class LibriBrainBase(Dataset):
             include_info: bool = False,
             preload_files: bool = True,
             preload_event_file: bool = True,
-            download: bool = True
+            download: bool = True,
+            preload_h5: bool = False
     ):
         """
         Base class for LibriBrain datasets.
@@ -119,6 +120,7 @@ class LibriBrainBase(Dataset):
         self.preload_files = preload_files
         self.preload_event_file = preload_event_file
         self.download = download
+        self.preload_h5 = preload_h5
 
         if partition is not None:
             if include_run_keys or exclude_run_keys or exclude_tasks:
@@ -485,6 +487,8 @@ class LibriBrainBase(Dataset):
         if (subject, session, task, run) not in self.open_h5_datasets:
             h5_path = self._ids_to_h5_path(subject, session, task, run)
             h5_dataset = h5py.File(h5_path, "r")["data"]
+            if self.preload_h5:
+                h5_dataset = h5_dataset[:]
             self.open_h5_datasets[(subject, session, task, run)] = h5_dataset
         else:
             h5_dataset = self.open_h5_datasets[(subject, session, task, run)]

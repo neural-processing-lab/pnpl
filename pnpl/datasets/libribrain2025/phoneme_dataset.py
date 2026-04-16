@@ -26,6 +26,7 @@ class LibriBrainPhoneme(LibriBrainBase):
         include_info: bool = False,
         preload_files: bool = True,
         download: bool = True,
+        preload_h5: bool = False,
     ):
         """
         LibriBrain phoneme classification dataset.
@@ -106,6 +107,7 @@ class LibriBrainPhoneme(LibriBrainBase):
             include_info=include_info,
             preload_files=preload_files,
             download=download,
+            preload_h5=preload_h5,
         )
         supported_label_types = ["phoneme", "voicing"]
         if (label_type not in supported_label_types):
