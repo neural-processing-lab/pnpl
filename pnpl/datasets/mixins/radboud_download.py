@@ -159,17 +159,44 @@ class RadboudDownloadMixin:
 
     def prefetch_files(self, file_paths: list[str]) -> None:
         """Prefetch multiple files in parallel (skips already-present)."""
-        futures = []
-        for fpath in {p for p in file_paths if not os.path.exists(p)}:
-            futures.append(self._schedule_download(fpath))
-        if futures:
-            print(f"Downloading {len(futures)} files from Radboud WebDAV...")
-            for future in futures:
-                try:
-                    future.result()
-                except Exception as e:
-                    print(f"Error downloading a file: {e}")
-            print("Done!")
+        # De-dupe + drop already-present files, but keep a stable order
+        # so the per-file completion log reads naturally.
+        seen: set[str] = set()
+        targets: list[str] = []
+        for fpath in file_paths:
+            if fpath in seen or os.path.exists(fpath):
+                continue
+            seen.add(fpath)
+            targets.append(fpath)
+        if not targets:
+            return
+
+        n = len(targets)
+        type(self)._log(f"Radboud WebDAV: downloading {n} file(s)…")
+
+        # Schedule the whole batch up front so the executor starts
+        # parallel downloads before we begin waiting on results.
+        scheduled = [(fpath, self._schedule_download(fpath)) for fpath in targets]
+
+        completed = 0
+        for fpath, future in scheduled:
+            try:
+                future.result()
+                completed += 1
+                # Always emit a per-file completion line — small files
+                # don't get a per-byte progress bar (we suppress it for
+                # anything < 10 MB to avoid bar spam) but users still
+                # need to see the batch advancing.
+                size = os.path.getsize(fpath) if os.path.exists(fpath) else None
+                size_str = type(self)._format_bytes(size)
+                type(self)._log(
+                    f"  [{completed}/{n}] {os.path.basename(fpath)} ({size_str})"
+                )
+            except Exception as exc:
+                type(self)._log(
+                    f"  [error] {os.path.basename(fpath)}: {exc}"
+                )
+        type(self)._log(f"Radboud WebDAV: done ({completed}/{n} files).")
 
     def ensure_file(self, fpath: str) -> str:
         """Ensure a file exists locally, downloading via WebDAV if needed."""
