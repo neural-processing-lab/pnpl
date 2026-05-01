@@ -387,6 +387,24 @@ class Armeni2022(
         os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
         fif_to_h5(raw, output_h5_path)
 
+    def _load_raw_lazy_meg_only(
+        self, subject: str, session: str, task: str, run: str,
+    ):
+        """Open the recording without preloading and pick MEG channels.
+
+        Reference / EEG / EOG / STIM channels are dropped here (the
+        events.tsv-driven tasks don't use them). The returned Raw is
+        not preloaded — caller iterates time chunks via ``crop``+
+        ``load_data`` so peak memory stays bounded for multi-GB
+        recordings like Armeni's 8 GB sessions.
+        """
+        raw = self.load_raw_bids(subject, session, task, run, preload=False)
+        try:
+            raw.pick(picks="meg", exclude=[])
+        except Exception:
+            pass
+        return raw
+
     def _preprocess_raw_to_h5(
         self,
         subject: str,
@@ -394,7 +412,13 @@ class Armeni2022(
         task: str,
         run: str,
         output_h5_path: str,
+        chunk_seconds: float = 120.0,
     ) -> None:
+        import gc
+
+        import mne
+        import numpy as np
+
         from ...preprocessing import Pipeline
         from ...preprocessing.config import (
             load_json_config,
@@ -402,19 +426,43 @@ class Armeni2022(
         )
         from ...preprocessing.serialization import fif_to_h5
 
-        raw = self.load_raw_bids(subject, session, task, run, preload=True)
+        raw_lazy = self._load_raw_lazy_meg_only(subject, session, task, run)
 
-        if self.preprocessing is not None:
-            step_names = self.preprocessing.split("+")
-            json_config = load_json_config(self.data_path)
-            resolved = resolve_preprocessing_config(
-                step_names=step_names,
-                json_config=json_config,
-                dataset_config=self.preprocessing_config,
+        if self.preprocessing is None:
+            # No filtering / downsampling — preload everything and
+            # serialize as-is. Caller is expected to size their machine
+            # to the recording.
+            raw_lazy.load_data(verbose=False)
+            os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
+            fif_to_h5(raw_lazy, output_h5_path)
+            return
+
+        step_names = self.preprocessing.split("+")
+        json_config = load_json_config(self.data_path)
+        resolved = resolve_preprocessing_config(
+            step_names=step_names,
+            json_config=json_config,
+            dataset_config=self.preprocessing_config,
+        )
+
+        # Run the pipeline chunk-wise so the preload step never exceeds
+        # ``chunk_seconds`` worth of data. Each chunk emerges from the
+        # pipeline at the target sample rate (typically 250 Hz),
+        # dramatically smaller than the source. Concatenating the
+        # processed chunks rebuilds the full timeline for
+        # ``fif_to_h5``.
+        duration = float(raw_lazy.times[-1])
+        boundaries = _chunk_boundaries(duration, chunk_seconds)
+
+        processed_chunks: list = []
+        for start, end in boundaries:
+            chunk = raw_lazy.copy().crop(tmin=start, tmax=end)
+            chunk.load_data(verbose=False)
+            pipeline = Pipeline.from_string(
+                self.preprocessing, config=resolved.config
             )
-            pipeline = Pipeline.from_string(self.preprocessing, config=resolved.config)
-            raw = pipeline.run(
-                raw,
+            chunk = pipeline.run(
+                chunk,
                 subject=subject,
                 session=session,
                 task=task,
@@ -422,14 +470,29 @@ class Armeni2022(
                 bids_root=self.data_path,
                 verbose=False,
             )
+            # Filters are done; downcast each chunk to float32 to halve
+            # the memory cost of holding all processed chunks before
+            # concatenation. fif_to_h5 saves float32 anyway, so this is
+            # lossless relative to the on-disk format.
+            if chunk._data is not None and chunk._data.dtype != np.float32:
+                chunk._data = chunk._data.astype(np.float32, copy=False)
+            processed_chunks.append(chunk)
+            gc.collect()
 
-            fif_path = self.get_preprocessed_path(
-                subject, session, task, run,
-                preprocessing=self.preprocessing,
-                extension="fif",
-            )
-            os.makedirs(os.path.dirname(fif_path), exist_ok=True)
-            raw.save(fif_path, overwrite=True, verbose=False)
+        if len(processed_chunks) == 1:
+            raw = processed_chunks[0]
+        else:
+            raw = mne.concatenate_raws(processed_chunks)
+        del processed_chunks
+        gc.collect()
+
+        fif_path = self.get_preprocessed_path(
+            subject, session, task, run,
+            preprocessing=self.preprocessing,
+            extension="fif",
+        )
+        os.makedirs(os.path.dirname(fif_path), exist_ok=True)
+        raw.save(fif_path, overwrite=True, verbose=False)
 
         os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
         fif_to_h5(raw, output_h5_path)
@@ -489,6 +552,28 @@ class Armeni2022(
     @property
     def n_times(self) -> int:
         return self.points_per_sample
+
+
+def _chunk_boundaries(duration: float, chunk_seconds: float) -> List[tuple]:
+    """Return ``[(t0, t1), ...]`` covering ``[0, duration]`` such that
+    every interval is at least ``chunk_seconds * 0.5`` long. A short
+    remainder gets folded into the previous interval — otherwise the
+    last chunk can be too brief for mne's notch / bp filter design and
+    triggers ``filter_length is longer than the signal`` distortion."""
+    if duration <= 0:
+        return []
+    min_chunk = chunk_seconds * 0.5
+    out: list[tuple] = []
+    start = 0.0
+    while start < duration:
+        end = min(start + chunk_seconds, duration)
+        out.append((start, end))
+        start = end
+    if len(out) >= 2 and (out[-1][1] - out[-1][0]) < min_chunk:
+        last_end = out[-1][1]
+        out.pop()
+        out[-1] = (out[-1][0], last_end)
+    return out
 
 
 def _apply_component_filters(

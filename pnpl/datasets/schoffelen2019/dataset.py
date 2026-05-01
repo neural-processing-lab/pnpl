@@ -353,6 +353,21 @@ class Schoffelen2019(
         os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
         fif_to_h5(raw, output_h5_path)
 
+    def _load_raw_lazy_meg_only(
+        self, subject: str, session: str, task: str, run: str,
+    ):
+        """Open the recording without preloading, pick MEG only.
+
+        Caller iterates time chunks via ``crop`` + ``load_data`` so
+        peak memory stays bounded for multi-GB recordings.
+        """
+        raw = self.load_raw_bids(subject, session, task, run, preload=False)
+        try:
+            raw.pick(picks="meg", exclude=[])
+        except Exception:
+            pass
+        return raw
+
     def _preprocess_raw_to_h5(
         self,
         subject: str,
@@ -360,7 +375,13 @@ class Schoffelen2019(
         task: str,
         run: str,
         output_h5_path: str,
+        chunk_seconds: float = 120.0,
     ) -> None:
+        import gc
+
+        import mne
+        import numpy as np
+
         from ...preprocessing import Pipeline
         from ...preprocessing.config import (
             load_json_config,
@@ -368,19 +389,38 @@ class Schoffelen2019(
         )
         from ...preprocessing.serialization import fif_to_h5
 
-        raw = self.load_raw_bids(subject, session, task, run, preload=True)
+        raw_lazy = self._load_raw_lazy_meg_only(subject, session, task, run)
 
-        if self.preprocessing is not None:
-            step_names = self.preprocessing.split("+")
-            json_config = load_json_config(self.data_path)
-            resolved = resolve_preprocessing_config(
-                step_names=step_names,
-                json_config=json_config,
-                dataset_config=self.preprocessing_config,
+        if self.preprocessing is None:
+            raw_lazy.load_data(verbose=False)
+            os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
+            fif_to_h5(raw_lazy, output_h5_path)
+            return
+
+        step_names = self.preprocessing.split("+")
+        json_config = load_json_config(self.data_path)
+        resolved = resolve_preprocessing_config(
+            step_names=step_names,
+            json_config=json_config,
+            dataset_config=self.preprocessing_config,
+        )
+
+        # Chunk-wise pipeline application — see Armeni2022 for the
+        # rationale. Each chunk is preloaded, processed (notch + bp +
+        # ds), and discarded except for the downsampled output.
+        from ..armeni2022.dataset import _chunk_boundaries
+        duration = float(raw_lazy.times[-1])
+        boundaries = _chunk_boundaries(duration, chunk_seconds)
+
+        processed_chunks: list = []
+        for start, end in boundaries:
+            chunk = raw_lazy.copy().crop(tmin=start, tmax=end)
+            chunk.load_data(verbose=False)
+            pipeline = Pipeline.from_string(
+                self.preprocessing, config=resolved.config
             )
-            pipeline = Pipeline.from_string(self.preprocessing, config=resolved.config)
-            raw = pipeline.run(
-                raw,
+            chunk = pipeline.run(
+                chunk,
                 subject=subject,
                 session=session,
                 task=task,
@@ -388,14 +428,25 @@ class Schoffelen2019(
                 bids_root=self.data_path,
                 verbose=False,
             )
+            if chunk._data is not None and chunk._data.dtype != np.float32:
+                chunk._data = chunk._data.astype(np.float32, copy=False)
+            processed_chunks.append(chunk)
+            gc.collect()
 
-            fif_path = self.get_preprocessed_path(
-                subject, session, task, run,
-                preprocessing=self.preprocessing,
-                extension="fif",
-            )
-            os.makedirs(os.path.dirname(fif_path), exist_ok=True)
-            raw.save(fif_path, overwrite=True, verbose=False)
+        if len(processed_chunks) == 1:
+            raw = processed_chunks[0]
+        else:
+            raw = mne.concatenate_raws(processed_chunks)
+        del processed_chunks
+        gc.collect()
+
+        fif_path = self.get_preprocessed_path(
+            subject, session, task, run,
+            preprocessing=self.preprocessing,
+            extension="fif",
+        )
+        os.makedirs(os.path.dirname(fif_path), exist_ok=True)
+        raw.save(fif_path, overwrite=True, verbose=False)
 
         os.makedirs(os.path.dirname(output_h5_path), exist_ok=True)
         fif_to_h5(raw, output_h5_path)
