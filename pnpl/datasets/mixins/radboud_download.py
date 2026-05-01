@@ -221,10 +221,17 @@ class RadboudDownloadMixin:
 
         with self._lock:
             if fpath not in self._download_futures:
-                # Resolve size lazily so we have a content length up front
-                # for the progress bar (requests' Content-Length header is
-                # also a fallback inside the worker).
-                size = type(self)._lookup_remote_size(rel_path)
+                # PROPFIND first: raises FileNotFoundError immediately if
+                # the remote path doesn't exist (including Radboud's
+                # quirky 500-on-missing-parent), so dataset classes can
+                # fall back to local processing without waiting through
+                # the worker's retry chain.
+                stat = type(self)._stat(rel_path)
+                size = stat.get("size")
+                try:
+                    size = int(size) if size is not None else None
+                except (TypeError, ValueError):
+                    size = None
                 self._download_futures[fpath] = self._executor.submit(
                     self._download_with_retry_static,
                     fpath=fpath,
@@ -333,10 +340,14 @@ class RadboudDownloadMixin:
                         f"Check {cls.RADBOUD_USERNAME_ENV} / "
                         f"{cls.RADBOUD_PASSWORD_ENV}."
                     )
-                if resp.status_code == 404:
-                    raise FileNotFoundError(
-                        f"Radboud WebDAV 404: {url}"
-                    )
+                if resp.status_code == 404 or resp.status_code == 500:
+                    # Radboud's WebDAV returns 500 (not 404) when any
+                    # parent folder on the path is missing. Both mean
+                    # "the path does not exist" for our purposes — fail
+                    # fast so dataset classes can fall back to the
+                    # local-creation path instead of waiting through a
+                    # 60+ s retry chain.
+                    raise FileNotFoundError(f"Radboud WebDAV {resp.status_code}: {url}")
                 if resp.status_code == 207:
                     return cls._parse_multistatus(resp.text)
                 if resp.status_code >= 500:
@@ -433,8 +444,13 @@ class RadboudDownloadMixin:
                             f"Check {cls.RADBOUD_USERNAME_ENV} / "
                             f"{cls.RADBOUD_PASSWORD_ENV}."
                         )
-                    if r.status_code == 404:
-                        raise FileNotFoundError(f"Radboud WebDAV 404: {download_url}")
+                    if r.status_code == 404 or r.status_code == 500:
+                        # See note in _propfind: Radboud's WebDAV returns
+                        # 500 (not 404) when an intermediate folder
+                        # doesn't exist. Treat both as fail-fast not-found.
+                        raise FileNotFoundError(
+                            f"Radboud WebDAV {r.status_code}: {download_url}"
+                        )
                     if r.status_code >= 500:
                         raise HTTPError(f"WebDAV server error {r.status_code}")
                     r.raise_for_status()
