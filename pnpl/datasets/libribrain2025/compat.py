@@ -57,6 +57,7 @@ class LibriBrainSpeech(LibriBrain):
         preload_files: bool = True,
         stride: Optional[int] = None,
         download: bool = True,
+        preload_h5: bool = False,
     ):
         task = SpeechDetection(
             tmin=tmin,
@@ -80,6 +81,7 @@ class LibriBrainSpeech(LibriBrain):
             include_info=include_info,
             preload_files=preload_files,
             download=download,
+            preload_h5=preload_h5,
         )
 
 
@@ -126,6 +128,7 @@ class LibriBrainPhoneme(LibriBrain):
         include_info: bool = False,
         preload_files: bool = True,
         download: bool = True,
+        preload_h5: bool = False,
     ):
         task = PhonemeClassification(
             tmin=tmin,
@@ -148,6 +151,7 @@ class LibriBrainPhoneme(LibriBrain):
             include_info=include_info,
             preload_files=preload_files,
             download=download,
+            preload_h5=preload_h5,
         )
         
         # Expose phoneme mappings for compatibility
@@ -204,6 +208,7 @@ class LibriBrainWord(LibriBrain):
         include_info: bool = False,
         preload_files: bool = True,
         download: bool = True,
+        preload_h5: bool = False,
         min_word_length: int = 1,
         max_word_length: Optional[int] = None,
         keyword_detection: Optional[str] = None,
@@ -235,6 +240,7 @@ class LibriBrainWord(LibriBrain):
             include_info=include_info,
             preload_files=preload_files,
             download=download,
+            preload_h5=preload_h5,
         )
         
         # Expose word mappings for compatibility

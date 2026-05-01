@@ -44,6 +44,7 @@ class LibriBrainBase(
         include_info: bool = False,
         preload_files: bool = True,
         download: bool = True,
+        preload_h5: bool = False,
     ):
         self.data_path = data_path
         self.partition = partition
@@ -94,7 +95,7 @@ class LibriBrainBase(
         if not self.intended_run_keys:
             raise ValueError("No run keys match the specified configuration")
 
-        self.init_continuous_h5()
+        self.init_continuous_h5(preload_h5=preload_h5)
         self.open_h5_datasets = {}
 
         if preload_files and download:

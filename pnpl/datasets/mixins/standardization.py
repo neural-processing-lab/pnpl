@@ -87,25 +87,30 @@ class StandardizationMixin:
             # (Some caching approaches may open the file in r+ separately.)
             n_samples.append(hdf_dataset.shape[1])
             
-            # Check for cached stats in H5 attributes
-            if "channel_means" in hdf_dataset.attrs and "channel_stds" in hdf_dataset.attrs:
-                channel_means = hdf_dataset.attrs["channel_means"]
-                channel_stds = hdf_dataset.attrs["channel_stds"]
+            # Check for cached stats in H5 attributes (numpy arrays from
+            # ``preload_h5=True`` have no ``attrs`` — recompute in that case).
+            attrs = getattr(hdf_dataset, "attrs", {})
+            if "channel_means" in attrs and "channel_stds" in attrs:
+                channel_means = attrs["channel_means"]
+                channel_stds = attrs["channel_stds"]
             else:
                 # Compute stats from data
                 data = hdf_dataset[:, :]
                 channel_means = np.mean(data, axis=1)
                 channel_stds = np.std(data, axis=1)
-                
-                # Try to cache the computed stats
-                try:
-                    import h5py
-                    with h5py.File(hdf_dataset.file.filename, "r+") as f:
-                        f["data"].attrs["channel_means"] = channel_means
-                        f["data"].attrs["channel_stds"] = channel_stds
-                    print(f"Cached stats for: {run_key}")
-                except Exception:
-                    pass  # Read-only file or other issue
+
+                # Try to cache the computed stats back to the source file.
+                source_file = getattr(hdf_dataset, "file", None)
+                source_path = getattr(source_file, "filename", None)
+                if source_path is not None:
+                    try:
+                        import h5py
+                        with h5py.File(source_path, "r+") as f:
+                            f["data"].attrs["channel_means"] = channel_means
+                            f["data"].attrs["channel_stds"] = channel_stds
+                        print(f"Cached stats for: {run_key}")
+                    except Exception:
+                        pass  # Read-only file or other issue
             
             means.append(channel_means)
             stds.append(channel_stds)

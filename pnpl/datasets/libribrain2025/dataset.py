@@ -48,6 +48,9 @@ class LibriBrain(
         include_info: Include metadata dict in samples
         preload_files: Eagerly download files on init
         download: Enable downloading from HuggingFace
+        preload_h5: Read each H5 file fully into RAM on first access (numpy
+            array, file handle closed). Faster repeated reads at the cost of
+            memory; off by default.
         
     Example:
         >>> from pnpl.datasets import LibriBrain
@@ -80,6 +83,7 @@ class LibriBrain(
         include_info: bool = False,
         preload_files: bool = True,
         download: bool = True,
+        preload_h5: bool = False,
     ):
         os.makedirs(data_path, exist_ok=True)
         
@@ -130,7 +134,7 @@ class LibriBrain(
             raise ValueError("No run keys match the specified configuration")
         
         # Initialize H5 caching
-        self.init_continuous_h5()
+        self.init_continuous_h5(preload_h5=preload_h5)
         
         # Prefetch files if requested
         if preload_files and download:

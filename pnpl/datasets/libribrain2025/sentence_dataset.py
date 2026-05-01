@@ -20,6 +20,7 @@ class LibriBrainSentence(LibriBrainBase):
         channel_stds: np.ndarray | None = None,
         include_info: bool = False,
         preload_files: bool = False,
+        preload_h5: bool = False,
     ):
         # We initialize with tmin/tmax = 0 as placeholders;
         # sentence duration is dynamic.
@@ -37,7 +38,8 @@ class LibriBrainSentence(LibriBrainBase):
             channel_means=channel_means,
             channel_stds=channel_stds,
             include_info=include_info,
-            preload_files=preload_files
+            preload_files=preload_files,
+            preload_h5=preload_h5,
         )
 
         self.samples = []
