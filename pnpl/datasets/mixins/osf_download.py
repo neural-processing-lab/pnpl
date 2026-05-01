@@ -57,6 +57,7 @@ class OSFDownloadMixin:
     _download_futures: ClassVar[dict] = {}
     _lock: ClassVar[threading.Lock] = threading.Lock()
     _manifest_cache: ClassVar[dict] = {}
+    _folder_listing_cache: ClassVar[dict] = {}
     _print_lock: ClassVar[threading.Lock] = threading.Lock()
 
     OSF_PROJECT_ID: ClassVar[str] = ""
@@ -152,15 +153,17 @@ class OSFDownloadMixin:
 
         with self._lock:
             if fpath not in self._download_futures:
+                # Lazy lookup: walk only the folders on the path to this file
+                # rather than building a global manifest of every file in
+                # every configured node.
+                entry = type(self).resolve_remote_file(rel_path)
                 self._download_futures[fpath] = self._executor.submit(
                     self._download_with_retry_static,
                     fpath=fpath,
                     rel_path=rel_path,
-                    nodes=self._project_nodes(),
-                    api_base=self.OSF_API_BASE.rstrip("/"),
+                    entry=entry,
                     files_base=self.OSF_FILES_BASE.rstrip("/"),
                     token=self._osf_token(),
-                    manifest=type(self).get_dataset_manifest(),
                 )
             return self._download_futures[fpath]
 
@@ -178,6 +181,11 @@ class OSFDownloadMixin:
                 },
                 ...
             }
+
+        Walks the entire folder tree across every configured node, which
+        can take minutes for large datasets. When the caller knows which
+        files it needs, prefer :meth:`resolve_remote_file` — it walks only
+        the folders along the path to a single file.
         """
         nodes = cls._project_nodes()
         if not nodes:
@@ -193,7 +201,16 @@ class OSFDownloadMixin:
         token = cls._osf_token()
         manifest: dict[str, dict] = {}
 
+        # Surface what we're doing — the walk is silent otherwise and can
+        # take minutes for multi-component projects like MEG-MASC.
+        cls._log(
+            f"OSF: fetching manifest from {len(nodes)} node(s) "
+            f"({', '.join(nodes)})… one-time, may take a while."
+        )
+
         for node_id in nodes:
+            t0 = time.monotonic()
+            count_before = len(manifest)
             for entry in cls._walk_node(node_id, api_base, token):
                 rel_path = entry["path"]
                 if rel_path in manifest:
@@ -204,15 +221,155 @@ class OSFDownloadMixin:
                     "file_id": entry["file_id"],
                     "size": entry["size"],
                 }
+            cls._log(
+                f"OSF: {node_id} — {len(manifest) - count_before} new files "
+                f"in {time.monotonic() - t0:.1f}s ({len(manifest)} total)"
+            )
 
         cls._manifest_cache[cache_key] = manifest
         return manifest
+
+    @classmethod
+    def _log(cls, message: str) -> None:
+        """Best-effort progress line, gated on PNPL_OSF_PROGRESS like the
+        download progress bar. Goes to stderr so it interleaves with
+        download bars cleanly."""
+        if not cls._progress_enabled():
+            return
+        with cls._print_lock:
+            sys.stderr.write(message + "\n")
+            sys.stderr.flush()
 
     @classmethod
     def list_remote_files(cls, refresh: bool = False) -> list[str]:
         """Return dataset-relative file paths advertised by the OSF manifest."""
         manifest = cls.get_dataset_manifest(refresh=refresh)
         return sorted(manifest.keys())
+
+    # ------------------------------------------------------------------
+    # Lazy per-file resolution (no global manifest)
+    # ------------------------------------------------------------------
+
+    @classmethod
+    def resolve_remote_file(cls, rel_path: str) -> dict:
+        """Resolve a single file's OSF location by walking only the
+        folders on its path (~3-4 API calls per *new* folder, served
+        from cache thereafter).
+
+        Returns ``{"node_id", "file_id", "size"}``.
+
+        If a global manifest has already been fetched, that entry wins —
+        callers are still free to call :meth:`get_dataset_manifest` for
+        bulk operations and benefit from the cache.
+        """
+        # Manifest hit?
+        nodes = cls._project_nodes()
+        if not nodes:
+            raise RuntimeError(
+                "OSF_PROJECT_ID is not set on the dataset class; cannot resolve from OSF."
+            )
+        cache_key = (cls.OSF_API_BASE.rstrip("/"), tuple(nodes), cls._osf_token() or "")
+        cached_manifest = cls._manifest_cache.get(cache_key)
+        if cached_manifest is not None and rel_path in cached_manifest:
+            return cached_manifest[rel_path]
+
+        api_base = cls.OSF_API_BASE.rstrip("/")
+        token = cls._osf_token()
+        parts = [p for p in rel_path.split("/") if p]
+        if not parts:
+            raise FileNotFoundError(f"Empty OSF path: {rel_path!r}")
+
+        last_exc: Optional[BaseException] = None
+        for node_id in nodes:
+            try:
+                entry = cls._lookup_in_node(node_id, parts, api_base, token)
+            except FileNotFoundError as exc:
+                last_exc = exc
+                continue
+            if entry is not None:
+                return entry
+
+        raise FileNotFoundError(
+            f"OSF file not found in any of {nodes}: '{rel_path}'."
+        ) from last_exc
+
+    @classmethod
+    def _lookup_in_node(
+        cls,
+        node_id: str,
+        parts: list[str],
+        api_base: str,
+        token: Optional[str],
+    ) -> Optional[dict]:
+        """Walk down ``node_id``'s osfstorage to find ``parts[0]/parts[1]/...``.
+        Returns the file entry or None if any path component is missing.
+        Folder listings are cached per (node, url) so subsequent lookups
+        of siblings under the same parent are free."""
+        folder_url = f"{api_base}/nodes/{quote(node_id, safe='')}/files/osfstorage/"
+
+        for i, part in enumerate(parts):
+            listing = cls._list_folder(node_id, folder_url, token)
+            match = next((e for e in listing if e["name"] == part), None)
+            if match is None:
+                return None
+            if i == len(parts) - 1:
+                if match["kind"] != "file":
+                    return None
+                return {
+                    "node_id": node_id,
+                    "file_id": match["file_id"],
+                    "size": match["size"],
+                }
+            if match["kind"] != "folder" or not match["files_url"]:
+                return None
+            folder_url = match["files_url"]
+        return None
+
+    @classmethod
+    def _list_folder(
+        cls,
+        node_id: str,
+        url: str,
+        token: Optional[str],
+    ) -> list[dict]:
+        """List immediate children of an OSF folder URL. Cached per
+        (node, url, token)."""
+        cache = cls._folder_listing_cache
+        cache_key = (node_id, url, token or "")
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        headers = {"Accept": "application/vnd.api+json"}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+
+        entries: list[dict] = []
+        next_url: Optional[str] = (
+            url + ("?" if "?" not in url else "&") + "page%5Bsize%5D=100"
+        )
+        while next_url:
+            payload = cls._get_with_retry(next_url, headers)
+            for entry in payload.get("data", []):
+                attrs = entry.get("attributes", {}) or {}
+                name = attrs.get("name")
+                if not name:
+                    continue
+                files_url = (
+                    ((entry.get("relationships") or {}).get("files") or {})
+                    .get("links", {}).get("related", {}).get("href")
+                )
+                entries.append({
+                    "kind": attrs.get("kind"),
+                    "name": name,
+                    "file_id": entry.get("id"),
+                    "size": attrs.get("size"),
+                    "files_url": files_url,
+                })
+            next_url = (payload.get("links") or {}).get("next")
+
+        cache[cache_key] = entries
+        return entries
 
     # ------------------------------------------------------------------
     # Manifest construction — recursive folder walk
@@ -304,23 +461,15 @@ class OSFDownloadMixin:
         cls,
         fpath: str,
         rel_path: str,
-        nodes: list[str],
-        api_base: str,
+        entry: dict,
         files_base: str,
         token: Optional[str],
-        manifest: dict,
         max_retries: int = 5,
         timeout_download_s: int = 120,
     ) -> str:
-        if not nodes:
-            raise RuntimeError(
-                "OSF_PROJECT_ID is not set on the dataset class; cannot download from OSF."
-            )
-
-        entry = manifest.get(rel_path)
         if entry is None:
             raise FileNotFoundError(
-                f"OSF file not found in manifest for any of {nodes}: '{rel_path}'."
+                f"OSF file not resolved before download: '{rel_path}'."
             )
 
         node_id = entry["node_id"]
