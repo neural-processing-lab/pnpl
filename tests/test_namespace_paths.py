@@ -58,8 +58,13 @@ def test_overlay_modules_are_discovered_without_registration(tmp_path, monkeypat
 
     monkeypatch.syspath_prepend(str(tmp_path))
 
+    # Pop via ``monkeypatch.delitem`` so teardown restores the original
+    # modules. Plain ``sys.modules.pop`` is permanent — a tmp_path-loaded
+    # ``pnpl`` (which lacks ``__init__.py`` at the overlay root and so
+    # resolves as a namespace package) would linger in ``sys.modules`` and
+    # poison every later test that re-imports pnpl.
     for modname in ["pnpl.tasks.private_overlay", "pnpl.tasks", "pnpl"]:
-        sys.modules.pop(modname, None)
+        monkeypatch.delitem(sys.modules, modname, raising=False)
 
     module = importlib.import_module("pnpl.tasks.private_overlay")
     assert module.VALUE == "overlay"
@@ -76,13 +81,16 @@ def test_overlay_modules_can_override_public_modules(tmp_path, monkeypatch):
 
     monkeypatch.syspath_prepend(str(tmp_path))
 
+    # See note in the previous test — ``monkeypatch.delitem`` lets
+    # teardown restore the regular ``pnpl`` modules. Without it, the
+    # namespace-loaded ``pnpl`` from this test bleeds into later tests.
     for modname in [
         "pnpl.datasets.libribrain2025.remote_constants",
         "pnpl.datasets.libribrain2025",
         "pnpl.datasets",
         "pnpl",
     ]:
-        sys.modules.pop(modname, None)
+        monkeypatch.delitem(sys.modules, modname, raising=False)
 
     libribrain = importlib.import_module("pnpl.datasets.libribrain2025")
     assert str(overlay_root) == list(libribrain.__path__)[0]
