@@ -23,6 +23,12 @@ _PUBLIC_MAP = {
     # MEG-MASC (Gwilliams et al., 2022) — auto-downloads from OSF
     "Gwilliams2022": ("pnpl.datasets.gwilliams2022.dataset", "Gwilliams2022"),
 
+    # Armeni et al. (2022) — Radboud Data Repository (auth required)
+    "Armeni2022": ("pnpl.datasets.armeni2022.dataset", "Armeni2022"),
+
+    # Schöffelen et al. (2019) "MOUS" — Radboud Data Repository (auth required)
+    "Schoffelen2019": ("pnpl.datasets.schoffelen2019.dataset", "Schoffelen2019"),
+
     # Utilities
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
 }

@@ -14,6 +14,7 @@ except Exception:
 from .download import HFDownloadMixin
 from .ohana_download import OhanaDownloadMixin
 from .osf_download import OSFDownloadMixin
+from .radboud_download import RadboudDownloadMixin
 from .standardization import StandardizationMixin
 from .continuous_h5 import ContinuousH5Mixin
 from .epoched_h5 import EpochedH5Mixin
@@ -23,6 +24,7 @@ __all__ = [
     "HFDownloadMixin",
     "OhanaDownloadMixin",
     "OSFDownloadMixin",
+    "RadboudDownloadMixin",
     "StandardizationMixin",
     "ContinuousH5Mixin",
     "EpochedH5Mixin",
