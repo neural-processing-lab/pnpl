@@ -1,29 +1,27 @@
-# Make this subpackage a namespace so the internal overlay can add
-# additional subpackages/modules alongside the public ones.
-try:  # pkgutil-style namespace for subpackage
-    import pkgutil as _pkgutil  # stdlib
-    __path__ = _pkgutil.extend_path(__path__, __name__)
+# Make this subpackage composition-friendly so additional modules can be added
+# or override existing ones without explicit registration.
+try:
+    from .._namespace import extend_overlay_path as _extend_overlay_path
+
+    __path__ = _extend_overlay_path(__path__, __name__)
 except Exception:
     pass
 
-# Lazily expose public convenience imports to avoid importing heavy
-# dependencies at module import time. Keep backwards compatibility with
-# `from pnpl.datasets import LibriBrainPhoneme`, etc.
+# Lazily expose convenience imports to avoid importing heavy dependencies at
+# module import time while keeping `from pnpl.datasets import LibriBrainPhoneme`
+# and similar imports available.
 _PUBLIC_MAP = {
-    "LibriBrainPhoneme": (
-        "pnpl.datasets.libribrain2025.phoneme_dataset", "LibriBrainPhoneme"
-    ),
-    "LibriBrainSpeech": (
-        "pnpl.datasets.libribrain2025.speech_dataset", "LibriBrainSpeech"
-    ),
-    "LibriBrainWord": (
-        "pnpl.datasets.libribrain2025.word_dataset", "LibriBrainWord"
-    ),
+    # LibriBrain dataset entry point with an explicit task parameter
+    "LibriBrain": ("pnpl.datasets.libribrain2025.dataset", "LibriBrain"),
+
+    # Dataset-specific wrappers
+    "LibriBrainPhoneme": ("pnpl.datasets.libribrain2025.compat", "LibriBrainPhoneme"),
+    "LibriBrainSpeech": ("pnpl.datasets.libribrain2025.compat", "LibriBrainSpeech"),
+    "LibriBrainWord": ("pnpl.datasets.libribrain2025.compat", "LibriBrainWord"),
+    "LibriBrainSentence": ("pnpl.datasets.libribrain2025.sentence_dataset", "LibriBrainSentence"),
+    
+    # Utilities
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
-    "LibriBrainCompetitionHoldout": (
-        "pnpl.datasets.libribrain2025.competition_holdout_dataset",
-        "LibriBrainCompetitionHoldout",
-    ),
 }
 
 __all__ = list(_PUBLIC_MAP.keys())
@@ -35,7 +33,7 @@ def __getattr__(name):  # pragma: no cover - import-time hook
         mod = import_module(modname)
         return getattr(mod, attr)
 
-    # Fallback to optional overlay re-exports when available
+    # Fallback to optional additional re-exports when available
     try:
         from importlib import import_module
         priv = import_module("pnpl.datasets._private_exports")
@@ -52,12 +50,3 @@ def __dir__():  # pragma: no cover - import-time hook
     except Exception:
         pass
     return sorted(names)
-
-# If an internal overlay is installed, it can publish additional public
-# symbols for convenient imports: `from pnpl.datasets import X`.
-# Importing this optional module is safe if the overlay is not present.
-try:  # pragma: no cover - optional extension point
-    from ._private_exports import *  # noqa: F401,F403
-except Exception:
-    # No internal overlay installed (or it failed to import); ignore.
-    pass

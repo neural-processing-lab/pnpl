@@ -2,7 +2,7 @@
 
 > The current primary use of the PNPL library is for the LibriBrain competition. [Click here](https://neural-processing-lab.github.io/2025-libribrain-competition/) to learn more and get started!
 
-Welcome to PNPL — a Python toolkit for loading and processing brain datasets for deep learning. It provides ready‑to‑use dataset classes (PyTorch `Dataset`) and utilities with a simple, consistent API.
+Welcome to PNPL — a Python toolkit for loading and processing brain datasets for deep learning. The package ships the LibriBrain 2025 dataset family plus shared preprocessing and task utilities.
 
 ## Features
 - Friendly dataset APIs backed by real MEG recordings
@@ -16,44 +16,36 @@ Welcome to PNPL — a Python toolkit for loading and processing brain datasets f
 pip install pnpl
 ```
 
-This will also take care of all requirements.
+This installs the package and its core dependencies.
 
 ## Usage
-The core functionality of the library is contained in the two Dataset classes `LibriBrainSpeech` and `LibriBrainPhoneme`.
-Check out the basic usage:
+A common entry point uses a task object:
 
-### LibriBrainSpeech
-This wraps the LibriBrain dataset for use in speech detection problems.
 ```python
-from pnpl.datasets import LibriBrainSpeech
+from pnpl.datasets import LibriBrain
+from pnpl.tasks import SpeechDetection
 
-speech_example_data = LibriBrainSpeech(
-    data_path="./data/",
-    include_run_keys = [("0","1","Sherlock1","1")]
+dataset = LibriBrain(
+    data_path="./data/LibriBrain",
+    task=SpeechDetection(tmin=0.0, tmax=0.5),
+    partition="train",
 )
 
-sample_data, label = speech_example_data[0]
-
-# Print out some basic info about the sample
-print("Sample data shape:", sample_data.shape)
-print("Label shape:", label.shape)
+sample_data, label = dataset[0]
+print(sample_data.shape, label.shape)
 ```
 
-### LibriBrainSpeech
-This wraps the LibriBrain dataset for use in phoneme classification problems.
+Dataset-specific wrapper classes are also available:
+
 ```python
-from pnpl.datasets import LibriBrainPhoneme
+from pnpl.datasets import LibriBrainSpeech, LibriBrainPhoneme
 
-phoneme_example_data = LibriBrainPhoneme(
-    data_path="./data/",
-    include_run_keys = [("0","1","Sherlock1","1")]
-)
-sample_data, label = phoneme_example_data[0]
-
-# Print out some basic info about the sample
-print("Sample data shape:", sample_data.shape)
-print("Label shape:", label.shape)
+speech_ds = LibriBrainSpeech(data_path="./data/LibriBrain", partition="train")
+phoneme_ds = LibriBrainPhoneme(data_path="./data/LibriBrain", partition="train")
 ```
+
+## Included Datasets
+- `pnpl` includes the `libribrain2025` dataset family together with shared preprocessing and task utilities.
 
 ## Support
 In case of any questions or problems, please get in touch through [our Discord server](https://discord.gg/Fqr8gJnvSh).
@@ -96,8 +88,8 @@ We welcome contributions from the community!
 
 Quick dev setup:
 ```bash
-git clone https://github.com/neural-processing-lab/pnpl-public.git
-cd pnpl-public
+git clone https://github.com/neural-processing-lab/pnpl.git
+cd pnpl
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 pip install pytest

@@ -3,11 +3,11 @@ import os
 import mne
 import pandas as pd
 import glob
-from typing import Callable
+from typing import Callable, Optional, List
 import warnings
 
 
-def get_bids_paths(data_path: str, path_to_id: Callable[[str], str | None], expected_ids: list[str], include_ids: list[str] | None = None, allow_non_id_paths: bool = True):
+def get_bids_paths(data_path: str, path_to_id: Callable[[str], Optional[str]], expected_ids: List[str], include_ids: Optional[List[str]] = None, allow_non_id_paths: bool = True):
     """
     Given a folder of BIDS data, expected ids of subfolders, and a function that maps a subfolder path to an ID this method returns the paths and ids of the subfolders
 
@@ -97,7 +97,7 @@ def read_wakeman_cache_file(preproc_path, subject, session, preload):
     return raw
 
 
-def get_serialized_files(base_path, key_names: list[str], present_value_combinations: list[list[int]]):
+def get_serialized_files(base_path, key_names: List[str], present_value_combinations: List[List[int]]):
     """
 
     key_names: list of the names of folders on each level such as "sub" or "ses"

@@ -4,15 +4,30 @@ title: Datasets
 
 # Public Datasets
 
-The `pnpl.datasets` package provides dataset classes designed for deep learning workflows (PyTorch `Dataset`).
+The public `pnpl.datasets` package provides the LibriBrain 2025 dataset family plus shared utilities for deep learning workflows.
+
+The main entry point is the task-based `LibriBrain` dataset:
+
+```python
+from pnpl.datasets import LibriBrain
+from pnpl.tasks import SpeechDetection, PhonemeClassification, WordDetection
+```
+
+Additional wrapper datasets are also available:
+
+```python
+from pnpl.datasets import (
+    GroupedDataset,
+    LibriBrainSpeech,
+    LibriBrainPhoneme,
+    LibriBrainWord,
+    LibriBrainSentence,
+)
+```
 
 ## GroupedDataset
 
 Utility dataset to group multiple datasets and expose a unified interface.
-
-```python
-from pnpl.datasets import GroupedDataset, LibriBrainSpeech, LibriBrainPhoneme
-```
 
 ## HDF5Dataset (base)
 
@@ -25,8 +40,8 @@ Key features:
 
 ## LibriBrain 2025
 
-- `LibriBrainPhoneme`: phoneme classification from MEG segments.
-- `LibriBrainSpeech`: speech/silence time-series labels over a window.
-
-Both rely on a BIDS-like directory structure and can download needed files from Hugging Face.
-
+- `LibriBrain`: task-based dataset entry point
+- `LibriBrainSpeech`: speech/silence time-series labels over a window
+- `LibriBrainPhoneme`: phoneme classification from MEG segments
+- `LibriBrainWord`: word-detection wrapper
+- `LibriBrainSentence`: sentence-level dataset wrapper

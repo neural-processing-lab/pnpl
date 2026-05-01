@@ -4,23 +4,18 @@ title: Quickstart
 
 # Quickstart
 
-This page shows short examples loading datasets and iterating samples.
+This page shows the task-based LibriBrain entry point together with dataset-specific wrappers.
 
-## LibriBrain Speech (public)
+## Task-based API
 
 ```python
-from pnpl.datasets.libribrain2025 import constants
-from pnpl.datasets import LibriBrainSpeech
+from pnpl.datasets import LibriBrain
+from pnpl.tasks import SpeechDetection
 
-# pick one run to keep it quick
-include_run_keys = [constants.RUN_KEYS[0]]  # e.g. ('0','1','Sherlock1','1')
-
-ds = LibriBrainSpeech(
+ds = LibriBrain(
     data_path="./data/LibriBrain",
-    preprocessing_str="bads+headpos+sss+notch+bp+ds",
-    include_run_keys=include_run_keys,
-    tmin=0.0,
-    tmax=0.2,
+    task=SpeechDetection(tmin=0.0, tmax=0.2),
+    partition="train",
     standardize=True,
     include_info=True,
 )
@@ -30,15 +25,22 @@ x, y, info = ds[0]
 print(x.shape, y.shape, info["dataset"])  # (channels,time), (time,), "libribrain2025"
 ```
 
-## LibriBrain Phoneme (public)
+## Wrapper datasets
 
 ```python
 from pnpl.datasets.libribrain2025 import constants
-from pnpl.datasets import LibriBrainPhoneme
+from pnpl.datasets import LibriBrainSpeech, LibriBrainPhoneme
 
 include_run_keys = [constants.RUN_KEYS[0]]
 
-ds = LibriBrainPhoneme(
+speech_ds = LibriBrainSpeech(
+    data_path="./data/LibriBrain",
+    include_run_keys=include_run_keys,
+    tmin=0.0,
+    tmax=0.2,
+)
+
+phoneme_ds = LibriBrainPhoneme(
     data_path="./data/LibriBrain",
     preprocessing_str="bads+headpos+sss+notch+bp+ds",
     include_run_keys=include_run_keys,
@@ -47,12 +49,12 @@ ds = LibriBrainPhoneme(
     standardize=True,
 )
 
-print(len(ds), "samples")
-x, y = ds[0]
+print(len(speech_ds), "speech samples")
+print(len(phoneme_ds), "phoneme samples")
+x, y = phoneme_ds[0]
 print(x.shape, y.item())
 ```
 
 ```{note}
 The first time you instantiate a dataset with `download=True` (default), required files are downloaded from Hugging Face and cached under `data_path`.
 ```
-

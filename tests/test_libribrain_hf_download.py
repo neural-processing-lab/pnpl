@@ -8,8 +8,8 @@ import numpy as np
 import h5py
 import pytest
 
-from pnpl.datasets.libribrain2025.speech_dataset import LibriBrainSpeech
-import pnpl.datasets.libribrain2025.base as lbbase
+import huggingface_hub
+from pnpl.datasets import LibriBrainSpeech
 
 
 def _write_h5(path: str, channels: int = 4, samples: int = 1000, sfreq: float = 250.0):
@@ -51,8 +51,8 @@ def test_libribrain_hf_download_and_sample_count(monkeypatch, stride):
             Path(full).write_text("")
         return str(full)
 
-    # Patch the exact function the dataset code calls
-    monkeypatch.setattr(lbbase, "hf_hub_download", fake_hf_hub_download, raising=True)
+    # Patch the exact function the dataset code calls (HFDownloadMixin imports it lazily).
+    monkeypatch.setattr(huggingface_hub, "hf_hub_download", fake_hf_hub_download, raising=True)
 
     with tempfile.TemporaryDirectory() as tmp:
         # Choose a single run key

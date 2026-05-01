@@ -8,7 +8,7 @@ logo: pnpl-wordmark.png
 only_build_toc_files: false
 
 repository:
-  url: https://github.com/neural-processing-lab/pnpl-public
+  url: https://github.com/neural-processing-lab/pnpl
   path_to_book: docs
   branch: main
 
