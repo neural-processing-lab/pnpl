@@ -412,6 +412,21 @@ class Schoffelen2019(
         duration = float(raw_lazy.times[-1])
         boundaries = _chunk_boundaries(duration, chunk_seconds)
 
+        from contextlib import redirect_stdout
+        import io
+
+        try:
+            from tqdm.auto import tqdm  # type: ignore
+
+            pbar = tqdm(
+                total=len(boundaries),
+                desc=f"Preprocessing {self.preprocessing}",
+                unit="chunk",
+                leave=True,
+            )
+        except Exception:
+            pbar = None
+
         processed_chunks: list = []
         for start, end in boundaries:
             chunk = raw_lazy.copy().crop(tmin=start, tmax=end)
@@ -419,19 +434,24 @@ class Schoffelen2019(
             pipeline = Pipeline.from_string(
                 self.preprocessing, config=resolved.config
             )
-            chunk = pipeline.run(
-                chunk,
-                subject=subject,
-                session=session,
-                task=task,
-                run=run,
-                bids_root=self.data_path,
-                verbose=False,
-            )
+            with redirect_stdout(io.StringIO()):
+                chunk = pipeline.run(
+                    chunk,
+                    subject=subject,
+                    session=session,
+                    task=task,
+                    run=run,
+                    bids_root=self.data_path,
+                    verbose=False,
+                )
             if chunk._data is not None and chunk._data.dtype != np.float32:
                 chunk._data = chunk._data.astype(np.float32, copy=False)
             processed_chunks.append(chunk)
+            if pbar is not None:
+                pbar.update(1)
             gc.collect()
+        if pbar is not None:
+            pbar.close()
 
         if len(processed_chunks) == 1:
             raw = processed_chunks[0]

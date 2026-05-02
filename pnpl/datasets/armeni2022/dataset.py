@@ -454,6 +454,26 @@ class Armeni2022(
         duration = float(raw_lazy.times[-1])
         boundaries = _chunk_boundaries(duration, chunk_seconds)
 
+        # Each chunk runs the same notch + bp + ds steps and the
+        # pipeline prints a 3-line "Applied / Applied / Downsampled"
+        # banner per chunk. With ~30 chunks for a 1-hour Armeni
+        # session that's 90+ identical lines. Hide them behind a
+        # single tqdm progress bar.
+        from contextlib import redirect_stdout
+        import io
+
+        try:
+            from tqdm.auto import tqdm  # type: ignore
+
+            pbar = tqdm(
+                total=len(boundaries),
+                desc=f"Preprocessing {self.preprocessing}",
+                unit="chunk",
+                leave=True,
+            )
+        except Exception:
+            pbar = None
+
         processed_chunks: list = []
         for start, end in boundaries:
             chunk = raw_lazy.copy().crop(tmin=start, tmax=end)
@@ -461,15 +481,16 @@ class Armeni2022(
             pipeline = Pipeline.from_string(
                 self.preprocessing, config=resolved.config
             )
-            chunk = pipeline.run(
-                chunk,
-                subject=subject,
-                session=session,
-                task=task,
-                run=run,
-                bids_root=self.data_path,
-                verbose=False,
-            )
+            with redirect_stdout(io.StringIO()):
+                chunk = pipeline.run(
+                    chunk,
+                    subject=subject,
+                    session=session,
+                    task=task,
+                    run=run,
+                    bids_root=self.data_path,
+                    verbose=False,
+                )
             # Filters are done; downcast each chunk to float32 to halve
             # the memory cost of holding all processed chunks before
             # concatenation. fif_to_h5 saves float32 anyway, so this is
@@ -477,7 +498,11 @@ class Armeni2022(
             if chunk._data is not None and chunk._data.dtype != np.float32:
                 chunk._data = chunk._data.astype(np.float32, copy=False)
             processed_chunks.append(chunk)
+            if pbar is not None:
+                pbar.update(1)
             gc.collect()
+        if pbar is not None:
+            pbar.close()
 
         if len(processed_chunks) == 1:
             raw = processed_chunks[0]
