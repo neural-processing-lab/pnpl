@@ -6,7 +6,16 @@ parts:
       - file: install
       - file: quickstart
       - file: datasets
+  - caption: Datasets
+    chapters:
       - file: libribrain
+      - file: gwilliams2022
+      - file: armeni2022
+      - file: schoffelen2019
+  - caption: Pipelines
+    chapters:
+      - file: preprocessing
+      - file: tasks
   - caption: Tutorials
     chapters:
       - file: LibriBrain_Competition_Speech_Detection.ipynb

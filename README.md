@@ -2,12 +2,16 @@
 
 > The current primary use of the PNPL library is for the LibriBrain competition. [Click here](https://neural-processing-lab.github.io/2025-libribrain-competition/) to learn more and get started!
 
-Welcome to PNPL — a Python toolkit for loading and processing brain datasets for deep learning. The package ships the LibriBrain 2025 dataset family plus shared preprocessing and task utilities.
+Welcome to PNPL — a Python toolkit for loading and processing brain
+datasets for deep learning. The package now ships four MEG dataset
+loaders (LibriBrain, MEG-MASC, Armeni 2022, MOUS) plus a composable
+preprocessing pipeline and shared task abstractions.
 
 ## Features
 - Friendly dataset APIs backed by real MEG recordings
-- Batteries‑included standardization, clipping, and windowing
-- LibriBrain 2025 dataset support with optional on‑demand download
+- Composable preprocessing pipeline (`bads+headpos+sss+notch+bp+ds`, etc.)
+- On-demand download from Hugging Face (LibriBrain), OSF (MEG-MASC), and Radboud WebDAV (Armeni, MOUS)
+- Task-based API: pick a task object, get `(x, y)` (or `(x, y, info)`) windows
 - Works with PyTorch `DataLoader` out of the box
 - Clean namespace and lazy imports to keep startup fast
 
@@ -44,11 +48,36 @@ speech_ds = LibriBrainSpeech(data_path="./data/LibriBrain", partition="train")
 phoneme_ds = LibriBrainPhoneme(data_path="./data/LibriBrain", partition="train")
 ```
 
+The same task-based pattern works for the other corpora:
+
+```python
+from pnpl.datasets import Gwilliams2022, Armeni2022, Schoffelen2019
+from pnpl.tasks.gwilliams2022 import PhonemeClassification
+
+meg_masc = Gwilliams2022(
+    data_path="./data/meg_masc",
+    task=PhonemeClassification(tmin=-0.2, tmax=0.6),
+    include_subjects=["01"], include_sessions=["0"], include_tasks=["0"],
+    preprocessing="notch+bp+ds",
+)
+```
+
 ## Included Datasets
-- `pnpl` includes the `libribrain2025` dataset family together with shared preprocessing and task utilities.
+
+| Class | Source | Auth |
+| --- | --- | --- |
+| `LibriBrain` (+ `LibriBrainSpeech`/`Phoneme`/`Word`/`Sentence`) | Hugging Face `pnpl/LibriBrain` | none |
+| `Gwilliams2022` (MEG-MASC) | OSF `ag3kj` | none |
+| `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud credentials |
+| `Schoffelen2019` (MOUS) | Radboud `DSC_3011020.09_236_v1` | Radboud credentials |
+
+For the Radboud-hosted datasets, set `RADBOUD_USERNAME` and
+`RADBOUD_PASSWORD` (an approved data-sharing agreement is required
+before access is granted).
 
 ## Support
 In case of any questions or problems, please get in touch through [our Discord server](https://discord.gg/Fqr8gJnvSh).
+
 ## Quickstart
 
 Load a single run of the LibriBrain Speech dataset and iterate samples:
@@ -78,6 +107,14 @@ We publish documentation with Jupyter Book and GitHub Pages.
 
 - Local preview: `pip install -r docs/requirements.txt && jupyter-book build docs/` then open `docs/_build/html/index.html`.
 - GitHub Pages: when made public, enable Pages via repo settings to publish automatically from the existing workflow.
+
+The docs cover:
+
+- Per-dataset pages (`docs/libribrain.md`, `docs/gwilliams2022.md`,
+  `docs/armeni2022.md`, `docs/schoffelen2019.md`)
+- The preprocessing pipeline (`docs/preprocessing.md`) and tasks
+  (`docs/tasks.md`)
+- Tutorials for the LibriBrain competition tracks
 
 ## Contributing
 We welcome contributions from the community!
