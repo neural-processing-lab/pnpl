@@ -13,6 +13,7 @@ except Exception:
 
 from .download import HFDownloadMixin
 from .ohana_download import OhanaDownloadMixin
+from .openneuro_download import OpenNeuroDownloadMixin
 from .osf_download import OSFDownloadMixin
 from .radboud_download import RadboudDownloadMixin
 from .standardization import StandardizationMixin
@@ -23,6 +24,7 @@ from .bids import BIDSMixin
 __all__ = [
     "HFDownloadMixin",
     "OhanaDownloadMixin",
+    "OpenNeuroDownloadMixin",
     "OSFDownloadMixin",
     "RadboudDownloadMixin",
     "StandardizationMixin",

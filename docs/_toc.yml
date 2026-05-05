@@ -12,6 +12,7 @@ parts:
       - file: gwilliams2022
       - file: armeni2022
       - file: schoffelen2019
+      - file: pallier2025
   - caption: Pipelines
     chapters:
       - file: preprocessing

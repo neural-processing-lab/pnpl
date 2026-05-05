@@ -91,6 +91,19 @@ from pnpl.tasks.armeni2022 import PhonemeClassification
   — phoneme-aligned epochs. ARPABET stress digits (`AH0`, `IY1`, …)
   are stripped before mapping to class ids.
 
+## Pallier 2025 (LittlePrince Listen) tasks
+
+```python
+from pnpl.tasks.pallier2025 import WordDetection
+```
+
+- `WordDetection(tmin, tmax, min_word_length, max_word_length, keep_top_k)`
+  — windowed around each word onset (`trial_type='Word'` rows in the
+  events.tsv). Default `tmin=0.0`, `tmax=3.0` matches the d'Ascoli et
+  al. (Nat Commun 2025) recipe. `keep_top_k` restricts the label
+  vocabulary to the *k* most-frequent tokens — useful for the paper's
+  "top-250" evaluation.
+
 ## Schöffelen 2019 (MOUS) tasks
 
 ```python

@@ -15,6 +15,7 @@ and the dataset materializes preprocessed H5 files on demand.
 | `Gwilliams2022` | OSF `ag3kj` (MEG-MASC) | none | KIT `.con` → H5 |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud login | CTF `.ds` → H5 |
 | `Schoffelen2019` | Radboud `DSC_3011020.09_236_v1` (MOUS) | Radboud login | CTF `.ds` → H5 |
+| `Pallier2025` | OpenNeuro `ds007523` (LittlePrince Listen) | none | Elekta `.fif` → H5 |
 
 Common imports:
 
@@ -25,6 +26,7 @@ from pnpl.datasets import (
     Gwilliams2022,
     Armeni2022,
     Schoffelen2019,
+    Pallier2025,
     # LibriBrain wrappers (no `task=` argument needed)
     LibriBrainSpeech,
     LibriBrainPhoneme,
@@ -41,6 +43,7 @@ See the per-dataset pages for end-to-end examples:
 - [Gwilliams 2022 (MEG-MASC)](gwilliams2022.md) — story listening, OSF
 - [Armeni 2022](armeni2022.md) — audiobook listening, Radboud
 - [Schöffelen 2019 (MOUS)](schoffelen2019.md) — sentence comprehension, Radboud
+- [Pallier 2025 (LittlePrince Listen)](pallier2025.md) — French audiobook listening, OpenNeuro
 
 ## Anatomy of a dataset class
 
@@ -48,8 +51,8 @@ Every dataset class composes the same building blocks (see
 `pnpl.datasets.mixins`):
 
 - a **download mixin** (`HFDownloadMixin`, `OSFDownloadMixin`,
-  `RadboudDownloadMixin`) that knows how to fetch missing files from the
-  appropriate remote
+  `RadboudDownloadMixin`, `OpenNeuroDownloadMixin`) that knows how to
+  fetch missing files from the appropriate remote
 - `BIDSMixin` for BIDS-style path resolution (`sub-XXX/ses-XXX/...`)
 - `ContinuousH5Mixin` for windowed reads from H5
 - `StandardizationMixin` for per-channel z-scoring + outlier clipping

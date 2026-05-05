@@ -10,7 +10,7 @@ preprocessing pipeline and shared task abstractions.
 ## Features
 - Friendly dataset APIs backed by real MEG recordings
 - Composable preprocessing pipeline (`bads+headpos+sss+notch+bp+ds`, etc.)
-- On-demand download from Hugging Face (LibriBrain), OSF (MEG-MASC), and Radboud WebDAV (Armeni, MOUS)
+- On-demand download from Hugging Face (LibriBrain), OSF (MEG-MASC), Radboud WebDAV (Armeni, MOUS), and OpenNeuro (LittlePrince)
 - Task-based API: pick a task object, get `(x, y)` (or `(x, y, info)`) windows
 - Works with PyTorch `DataLoader` out of the box
 - Clean namespace and lazy imports to keep startup fast
@@ -70,6 +70,7 @@ meg_masc = Gwilliams2022(
 | `Gwilliams2022` (MEG-MASC) | OSF `ag3kj` | none |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud credentials |
 | `Schoffelen2019` (MOUS) | Radboud `DSC_3011020.09_236_v1` | Radboud credentials |
+| `Pallier2025` (LittlePrince Listen) | OpenNeuro `ds007523` | none |
 
 For the Radboud-hosted datasets, set `RADBOUD_USERNAME` and
 `RADBOUD_PASSWORD` (an approved data-sharing agreement is required

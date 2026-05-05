@@ -29,6 +29,9 @@ _PUBLIC_MAP = {
     # Schöffelen et al. (2019) "MOUS" — Radboud Data Repository (auth required)
     "Schoffelen2019": ("pnpl.datasets.schoffelen2019.dataset", "Schoffelen2019"),
 
+    # Pallier et al. (2025) "LittlePrince — Listen" — OpenNeuro ds007523
+    "Pallier2025": ("pnpl.datasets.pallier2025.dataset", "Pallier2025"),
+
     # Utilities
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
 }
