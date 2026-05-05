@@ -191,6 +191,17 @@ class Pallier2025(
                 "No Pallier2025 samples found for the specified configuration"
             )
 
+        # Drop samples whose window doesn't fully fit inside the recording.
+        # The audiobook tasks use long windows (tmax=3.0 by default), so a
+        # handful of late events would otherwise return short slices and
+        # break batch collation.
+        self.samples = self._filter_in_bounds_samples(self.samples)
+        if not self.samples:
+            raise ValueError(
+                "All Pallier2025 samples were dropped as out-of-bounds — "
+                "check tmin/tmax against the recording duration."
+            )
+
         self.setup_standardization(
             standardize=standardize,
             clipping_boundary=clipping_boundary,
@@ -531,6 +542,37 @@ class Pallier2025(
             return self.get_h5_dataset(run_key)
 
         self.calculate_standardization_params(h5_loader)
+
+    def _filter_in_bounds_samples(self, samples: list[tuple]) -> list[tuple]:
+        sfreq = self.sfreq
+        pps = self.points_per_sample
+        offset_samples = int(self.tmin * sfreq)
+
+        run_lengths: dict[tuple, int] = {}
+        for rk in self.run_keys:
+            run_lengths[rk] = int(self.get_h5_dataset(rk).shape[1])
+
+        kept: list[tuple] = []
+        dropped = 0
+        for sample in samples:
+            rk = tuple(sample[:4])
+            n_times = run_lengths.get(rk)
+            if n_times is None:
+                dropped += 1
+                continue
+            onset_samples = int(float(sample[4]) * sfreq) + offset_samples
+            if onset_samples < 0 or onset_samples + pps > n_times:
+                dropped += 1
+                continue
+            kept.append(sample)
+
+        if dropped:
+            warnings.warn(
+                f"Pallier2025: dropped {dropped} samples whose window "
+                f"({self.tmin:+g}..{self.tmax:+g} s) does not fit within "
+                f"the recording — kept {len(kept)} of {len(samples)}."
+            )
+        return kept
 
     # ------------------------------------------------------------------
     # Dataset interface
