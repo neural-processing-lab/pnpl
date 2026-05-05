@@ -20,6 +20,12 @@ _PUBLIC_MAP = {
     "LibriBrainWord": ("pnpl.datasets.libribrain2025.compat", "LibriBrainWord"),
     "LibriBrainSentence": ("pnpl.datasets.libribrain2025.sentence_dataset", "LibriBrainSentence"),
 
+    # LibriBrain100 — union of pnpl/LibriBrain + pnpl/LibriBrain2
+    "LibriBrain100": ("pnpl.datasets.libribrain100.dataset", "LibriBrain100"),
+    "LibriBrain100Speech": ("pnpl.datasets.libribrain100.compat", "LibriBrain100Speech"),
+    "LibriBrain100Phoneme": ("pnpl.datasets.libribrain100.compat", "LibriBrain100Phoneme"),
+    "LibriBrain100Word": ("pnpl.datasets.libribrain100.compat", "LibriBrain100Word"),
+
     # MEG-MASC (Gwilliams et al., 2022) — auto-downloads from OSF
     "Gwilliams2022": ("pnpl.datasets.gwilliams2022.dataset", "Gwilliams2022"),
 

@@ -4,3 +4,7 @@
 scripts/*
 .DS_Store
 .idea
+.claude/
+
+# Dataset paper draft — local only.
+/libribrain100-paper/
