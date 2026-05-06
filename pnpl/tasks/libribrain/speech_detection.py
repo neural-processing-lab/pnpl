@@ -84,13 +84,25 @@ class SpeechDetection:
     def _get_speech_labels_for_run(self, dataset, run_key: tuple) -> Optional[np.ndarray]:
         """
         Build speech/silence label array for a run.
-        
+
+        Two events.tsv schemas are supported:
+
+        - **Sherlock-style** (LibriBrain1..9): explicit ``silence`` rows
+          tile the gaps between words. Samples are speech (1) by
+          default, and ``silence`` rows carve out the 0 regions. The
+          pre-annotation lead-in is set to silence.
+        - **TIMIT / MOCHATIMIT / TheMoth-style**: events.tsv only lists
+          ``word`` and ``phoneme`` rows. We treat the recording as
+          silence (0) by default and mark the spans covered by ``word``
+          rows as speech (1).
+
         Returns:
-            Array where 1=speech, 0=silence, indexed by sample number
+            Array where 1=speech, 0=silence, indexed by sample number,
+            or ``None`` if the events file has no word annotations.
         """
         subject, session, task, run = run_key
         sfreq = dataset.sfreq
-        
+
         # Load events
         try:
             events_path = dataset.get_events_path(subject, session, task, run)
@@ -99,40 +111,64 @@ class SpeechDetection:
             df = pd.read_csv(events_path, sep="\t")
         except Exception:
             return None
-        
+
         # Convert times to samples
         df['timemeg_samples'] = (pd.to_numeric(df['timemeg'], errors='coerce') * sfreq).astype(int)
         df['duration_samples'] = (pd.to_numeric(df['duration'], errors='coerce') * sfreq).astype(int)
-        
+
         # Filter for silence and word entries
         silence_df = df[df['kind'] == 'silence']
         words_df = df[df['kind'] == 'word']
-        
-        if silence_df.empty or words_df.empty:
+
+        if words_df.empty:
+            # No word annotations at all — nothing meaningful to label.
             return None
-        
-        # Determine array size
+
+        if silence_df.empty:
+            # No explicit silence rows: derive labels by marking word
+            # spans as speech (1) on a silence-by-default canvas.
+            return self._labels_from_words_only(words_df)
+
+        return self._labels_from_words_and_silence(words_df, silence_df)
+
+    @staticmethod
+    def _labels_from_words_and_silence(
+        words_df: pd.DataFrame, silence_df: pd.DataFrame,
+    ) -> np.ndarray:
         max_word = (words_df['timemeg_samples'] + words_df['duration_samples']).max()
         max_silence = (silence_df['timemeg_samples'] + silence_df['duration_samples']).max()
-        array_size = max(max_word, max_silence) + 1
-        
-        # Initialize with speech (1)
+        array_size = int(max(max_word, max_silence)) + 1
+
         speech_labels = np.ones(array_size, dtype=np.int32)
-        
-        # Set pre-annotation period to silence
-        min_word = words_df['timemeg_samples'].min()
-        min_silence = silence_df['timemeg_samples'].min()
-        min_sample = min(min_word, min_silence)
-        speech_labels[:min_sample] = 0
-        
-        # Mark silence segments
+
+        # Pre-annotation period is silence.
+        min_sample = int(min(
+            words_df['timemeg_samples'].min(),
+            silence_df['timemeg_samples'].min(),
+        ))
+        speech_labels[:max(min_sample, 0)] = 0
+
+        # Carve out silence intervals.
         for _, row in silence_df.iterrows():
             start = row['timemeg_samples']
             duration = row['duration_samples']
             if not np.isnan(start) and not np.isnan(duration):
                 end = int(start + duration)
                 speech_labels[int(start):end] = 0
-        
+        return speech_labels
+
+    @staticmethod
+    def _labels_from_words_only(words_df: pd.DataFrame) -> np.ndarray:
+        max_word_end = int(
+            (words_df['timemeg_samples'] + words_df['duration_samples']).max()
+        )
+        speech_labels = np.zeros(max_word_end + 1, dtype=np.int32)
+        for _, row in words_df.iterrows():
+            start = row['timemeg_samples']
+            duration = row['duration_samples']
+            if not np.isnan(start) and not np.isnan(duration):
+                end = int(start + duration)
+                speech_labels[int(start):end] = 1
         return speech_labels
     
     def _collect_windowed(

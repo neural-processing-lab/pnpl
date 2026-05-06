@@ -372,6 +372,67 @@ def test_no_local_data_raises(tmp_path):
         )
 
 
+def test_speech_detection_works_on_word_only_schema(tmp_path):
+    """SpeechDetection must derive silence from word gaps when the
+    events.tsv has no explicit silence rows (TIMIT/MOCHATIMIT/TheMoth)."""
+    from pnpl.tasks import SpeechDetection
+
+    events_path = tmp_path / "events.tsv"
+    # TIMIT/TheMoth-style: only word + phoneme rows.
+    events_path.write_text(
+        "kind\ttimemeg\tduration\tsegment\n"
+        "word\t0.10\t0.30\thello\n"
+        "phoneme\t0.10\t0.05\thh\n"
+        "word\t0.50\t0.20\tthere\n"
+        "word\t1.00\t0.10\tworld\n"
+    )
+
+    class FakeDataset:
+        sfreq = 250.0
+        run_keys = [("0", "1", "TheMoth", "1")]
+
+        def get_events_path(self, *a, **k):
+            return str(events_path)
+
+    task = SpeechDetection(tmin=0.0, tmax=0.5)
+    labels = task._get_speech_labels_for_run(FakeDataset(), FakeDataset.run_keys[0])
+    assert labels is not None, "must not silently skip word-only events"
+    # 1 wherever a word lives, 0 in the gaps.
+    assert labels[30] == 1   # inside 'hello' (0.10..0.40 → samples 25..100)
+    assert labels[110] == 0  # between 'hello' and 'there'
+    assert labels[130] == 1  # inside 'there'
+    assert labels[260] == 1  # inside 'world' (1.00..1.10 → samples 250..275)
+
+
+def test_speech_detection_preserves_sherlock_behavior(tmp_path):
+    """Sherlock-style schema with explicit silence rows is unchanged."""
+    from pnpl.tasks import SpeechDetection
+
+    events_path = tmp_path / "events.tsv"
+    events_path.write_text(
+        "kind\ttimemeg\tduration\tsegment\n"
+        "silence\t0.00\t0.10\t.\n"
+        "word\t0.10\t0.30\thello\n"
+        "silence\t0.40\t0.10\t.\n"
+        "word\t0.50\t0.20\tthere\n"
+    )
+
+    class FakeDataset:
+        sfreq = 250.0
+        run_keys = [("0", "1", "Sherlock1", "1")]
+
+        def get_events_path(self, *a, **k):
+            return str(events_path)
+
+    task = SpeechDetection(tmin=0.0, tmax=0.5)
+    labels = task._get_speech_labels_for_run(FakeDataset(), FakeDataset.run_keys[0])
+    assert labels is not None
+    assert labels[0] == 0     # explicit silence start
+    assert labels[30] == 1    # inside 'hello'
+    assert labels[110] == 0   # explicit silence between words
+    assert labels[130] == 1   # inside 'there'
+
+
 def test_partition_and_explicit_run_keys_raises(tmp_path):
     from pnpl.datasets.libribrain100 import LibriBrain100
     from pnpl.tasks import SpeechDetection

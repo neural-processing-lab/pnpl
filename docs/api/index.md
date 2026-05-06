@@ -21,6 +21,10 @@ module.
    pnpl.datasets.libribrain2025.compat.LibriBrainPhoneme
    pnpl.datasets.libribrain2025.compat.LibriBrainWord
    pnpl.datasets.libribrain2025.sentence_dataset.LibriBrainSentence
+   pnpl.datasets.libribrain100.dataset.LibriBrain100
+   pnpl.datasets.libribrain100.compat.LibriBrain100Speech
+   pnpl.datasets.libribrain100.compat.LibriBrain100Phoneme
+   pnpl.datasets.libribrain100.compat.LibriBrain100Word
    pnpl.datasets.gwilliams2022.dataset.Gwilliams2022
    pnpl.datasets.armeni2022.dataset.Armeni2022
    pnpl.datasets.schoffelen2019.dataset.Schoffelen2019

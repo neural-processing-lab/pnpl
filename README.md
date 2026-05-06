@@ -62,11 +62,29 @@ meg_masc = Gwilliams2022(
 )
 ```
 
+For the full LibriBrain release (deep sub-0 across 9 Sherlock books +
+TIMIT + MOCHA-TIMIT + 30 Moth podcasts, plus 32 broad subjects on
+Sherlock1 ses-11/ses-12), use `LibriBrain100`:
+
+```python
+from pnpl.datasets import LibriBrain100
+from pnpl.tasks import SpeechDetection
+
+ds = LibriBrain100(
+    data_path="./data/LibriBrain100",
+    task=SpeechDetection(tmin=0.0, tmax=0.5),
+    partition="train",
+    subjects="deep",       # or "broad", "all", 0, [1, 2, 3], range(1, 33)
+    corpus="sherlock",     # or "timit", "mocha", "podcasts", "all"
+)
+```
+
 ## Included Datasets
 
 | Class | Source | Auth |
 | --- | --- | --- |
 | `LibriBrain` (+ `LibriBrainSpeech`/`Phoneme`/`Word`/`Sentence`) | Hugging Face `pnpl/LibriBrain` | none |
+| `LibriBrain100` (+ `LibriBrain100Speech`/`Phoneme`/`Word`) | HF `pnpl/LibriBrain` ∪ `pnpl/LibriBrain2` (deep + broad release) | none |
 | `Gwilliams2022` (MEG-MASC) | OSF `ag3kj` | none |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud credentials |
 | `Schoffelen2019` (MOUS) | Radboud `DSC_3011020.09_236_v1` | Radboud credentials |

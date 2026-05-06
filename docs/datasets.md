@@ -12,6 +12,7 @@ and the dataset materializes preprocessed H5 files on demand.
 | Class | Source | Auth | Format on disk |
 | --- | --- | --- | --- |
 | `LibriBrain` | Hugging Face `pnpl/LibriBrain` | none | preprocessed H5 |
+| `LibriBrain100` | HF `pnpl/LibriBrain` ∪ `pnpl/LibriBrain2` (deep + broad release) | none | preprocessed H5 |
 | `Gwilliams2022` | OSF `ag3kj` (MEG-MASC) | none | KIT `.con` → H5 |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud login | CTF `.ds` → H5 |
 | `Schoffelen2019` | Radboud `DSC_3011020.09_236_v1` (MOUS) | Radboud login | CTF `.ds` → H5 |
@@ -23,6 +24,7 @@ Common imports:
 from pnpl.datasets import (
     # Task-based entry points
     LibriBrain,
+    LibriBrain100,
     Gwilliams2022,
     Armeni2022,
     Schoffelen2019,
@@ -32,6 +34,9 @@ from pnpl.datasets import (
     LibriBrainPhoneme,
     LibriBrainWord,
     LibriBrainSentence,
+    LibriBrain100Speech,
+    LibriBrain100Phoneme,
+    LibriBrain100Word,
     # Utilities
     GroupedDataset,
 )
@@ -39,7 +44,8 @@ from pnpl.datasets import (
 
 See the per-dataset pages for end-to-end examples:
 
-- [LibriBrain](libribrain.md) — speech, phoneme, word, sentence tasks
+- [LibriBrain](libribrain.md) — original release (sub-0 × Sherlock1..7), speech / phoneme / word / sentence tasks
+- [LibriBrain100](libribrain100.md) — full release: sub-0 across 9 Sherlock books + TIMIT + MOCHA-TIMIT + 30 Moth podcasts, plus 32 broad subjects on Sherlock1 ses-11/ses-12
 - [Gwilliams 2022 (MEG-MASC)](gwilliams2022.md) — story listening, OSF
 - [Armeni 2022](armeni2022.md) — audiobook listening, Radboud
 - [Schöffelen 2019 (MOUS)](schoffelen2019.md) — sentence comprehension, Radboud
