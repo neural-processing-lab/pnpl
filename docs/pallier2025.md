@@ -23,11 +23,11 @@ The companion paper is d'Ascoli, Bel, Rapin, King et al.,
 
 ```python
 from pnpl.datasets import Pallier2025
-from pnpl.tasks.pallier2025 import WordDetection
+from pnpl.tasks.pallier2025 import WordClassification
 
 ds = Pallier2025(
     data_path="./data/pallier2025",
-    task=WordDetection(tmin=0.0, tmax=3.0),
+    task=WordClassification(tmin=0.0, tmax=3.0),
     include_subjects=["01"],
     include_runs=["01"],            # one ~10 min audiobook segment
     preprocessing="notch+bp+ds",    # 50/100 Hz notch, 0.1–125 Hz bp, 250 Hz resample
@@ -76,7 +76,7 @@ notch or SSS. The pipeline is configurable on a per-step basis:
 ```python
 ds = Pallier2025(
     data_path="./data/pallier2025",
-    task=WordDetection(tmin=0.0, tmax=3.0),
+    task=WordClassification(tmin=0.0, tmax=3.0),
     include_subjects=["01"],
     preprocessing="bp+ds",
     preprocessing_config={
@@ -91,7 +91,7 @@ mechanism (defaults < JSON < dataset config).
 
 ## Selected arguments
 
-- `task` — currently `pnpl.tasks.pallier2025.WordDetection`.
+- `task` — currently `pnpl.tasks.pallier2025.WordClassification`.
 - `preprocessing` — pipeline string used in derivative filenames.
   Default `"notch+bp+ds"`. `None` materializes H5 from the raw FIF
   unchanged.
@@ -106,7 +106,7 @@ mechanism (defaults < JSON < dataset config).
 
 ## Available task
 
-`WordDetection(tmin, tmax, min_word_length, max_word_length, keep_top_k)` —
+`WordClassification(tmin, tmax, min_word_length, max_word_length, keep_top_k)` —
 windowed around each word onset.
 
 - `tmin`, `tmax` — defaults `0.0`, `3.0` to match d'Ascoli 2025.

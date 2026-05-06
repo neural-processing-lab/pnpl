@@ -1,5 +1,5 @@
 """
-Word Detection task for the MEG-MASC dataset (Gwilliams et al., 2022).
+Word Classification task for the MEG-MASC dataset (Gwilliams et al., 2022).
 
 Each sample is aligned to a word onset; the label is the lower-cased word
 string. Useful for word-onset decoding or word-frequency regression.
@@ -15,9 +15,9 @@ import pandas as pd
 
 
 @dataclass
-class WordDetection:
+class WordClassification:
     """
-    Word-onset detection / classification on MEG-MASC.
+    Word-onset classification on MEG-MASC.
 
     Sample tuples follow the continuous-data convention:
     ``(subject, session, task, run, onset, word_str)``. By default the
@@ -89,3 +89,10 @@ def _parse_trial_type(value) -> Optional[dict]:
     if not isinstance(parsed, dict):
         return None
     return parsed
+
+
+# Backwards-compatible alias for code written against pnpl <= 0.1.0.
+WordDetection = WordClassification
+
+
+__all__ = ["WordClassification", "WordDetection"]

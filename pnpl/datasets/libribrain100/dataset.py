@@ -32,7 +32,7 @@ class LibriBrain100(LibriBrain100Base):
         task: Object implementing :class:`pnpl.tasks.base.TaskProtocol`
             (e.g. :class:`pnpl.tasks.SpeechDetection`,
             :class:`pnpl.tasks.PhonemeClassification`,
-            :class:`pnpl.tasks.WordDetection`).
+            :class:`pnpl.tasks.WordClassification`).
         partition: ``"train"``, ``"validation"``, or ``"test"``. Aliases
             ``"val"``/``"valid"`` accepted. ``None`` means "no
             partition filter — apply only the explicit selectors".

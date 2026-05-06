@@ -17,7 +17,7 @@ from .selectors import CorpusArg, PartitionArg, SubjectsArg
 from ...tasks.libribrain import (
     PhonemeClassification,
     SpeechDetection,
-    WordDetection,
+    WordClassification,
 )
 
 
@@ -150,7 +150,7 @@ class LibriBrain100Word(LibriBrain100):
         download: bool = True,
         preload_h5: bool = False,
     ):
-        task = WordDetection(
+        task = WordClassification(
             tmin=tmin,
             tmax=tmax,
             min_word_length=min_word_length,

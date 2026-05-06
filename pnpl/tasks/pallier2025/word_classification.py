@@ -1,5 +1,5 @@
 """
-Word Detection task for the Pallier 2025 LittlePrince Listen dataset.
+Word Classification task for the Pallier 2025 LittlePrince Listen dataset.
 
 The events.tsv schema is one row per word onset:
 
@@ -22,7 +22,7 @@ import pandas as pd
 
 
 @dataclass
-class WordDetection:
+class WordClassification:
     """
     Word-onset classification on Pallier 2025 (LittlePrince Listen).
 
@@ -122,3 +122,10 @@ class WordDetection:
 
     def get_label(self, sample: tuple) -> int:
         return self._word_to_id.get(sample[5], 0)
+
+
+# Backwards-compatible alias for code written against pnpl <= 0.1.0.
+WordDetection = WordClassification
+
+
+__all__ = ["WordClassification", "WordDetection"]

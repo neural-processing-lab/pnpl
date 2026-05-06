@@ -103,7 +103,7 @@ def test_phoneme_task_label_lookup_after_collect(tmp_path):
 
 
 def test_word_task_label_lookup_after_collect(tmp_path):
-    from pnpl.tasks.gwilliams2022 import WordDetection
+    from pnpl.tasks.gwilliams2022 import WordClassification
 
     events_path = tmp_path / "events.tsv"
     events_path.write_text(
@@ -119,7 +119,7 @@ def test_word_task_label_lookup_after_collect(tmp_path):
         def get_events_path(self, *args, **kwargs):
             return str(events_path)
 
-    task = WordDetection()
+    task = WordClassification()
     samples = task.collect_samples(FakeDataset())
     assert [s[5] for s in samples] == ["tara", "walked"]
     assert task.label_info["classes"] == ["tara", "walked"]

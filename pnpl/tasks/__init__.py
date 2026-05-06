@@ -18,7 +18,8 @@ from .base import TaskProtocol
 from .libribrain import (
     SpeechDetection,
     PhonemeClassification,
-    WordDetection,
+    WordClassification,
+    WordDetection,  # backwards-compat alias for WordClassification
 )
 
 __all__ = [
@@ -27,5 +28,6 @@ __all__ = [
     # LibriBrain
     "SpeechDetection",
     "PhonemeClassification",
+    "WordClassification",
     "WordDetection",
 ]

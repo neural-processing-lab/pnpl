@@ -1,10 +1,18 @@
 def test_public_tasks_import():
-    from pnpl.tasks import PhonemeClassification, SpeechDetection, TaskProtocol, WordDetection
+    from pnpl.tasks import (
+        PhonemeClassification,
+        SpeechDetection,
+        TaskProtocol,
+        WordClassification,
+        WordDetection,
+    )
 
     assert TaskProtocol is not None
     assert SpeechDetection is not None
     assert PhonemeClassification is not None
-    assert WordDetection is not None
+    assert WordClassification is not None
+    # Backwards-compat alias for code written against pnpl <= 0.1.0.
+    assert WordDetection is WordClassification
 
 
 def test_public_preprocessing_import():

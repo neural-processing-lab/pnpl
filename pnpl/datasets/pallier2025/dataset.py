@@ -25,10 +25,10 @@ before scaling up.
 
 Example:
     >>> from pnpl.datasets import Pallier2025
-    >>> from pnpl.tasks.pallier2025 import WordDetection
+    >>> from pnpl.tasks.pallier2025 import WordClassification
     >>> ds = Pallier2025(
     ...     data_path="./data/pallier2025",
-    ...     task=WordDetection(tmin=0.0, tmax=3.0),
+    ...     task=WordClassification(tmin=0.0, tmax=3.0),
     ...     include_subjects=["01"],
     ...     include_runs=["01"],
     ... )

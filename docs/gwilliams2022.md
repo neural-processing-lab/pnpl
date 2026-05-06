@@ -60,7 +60,7 @@ prints a warning.
 ## Selected arguments
 
 - `task` — any object implementing `TaskProtocol`. Built-ins live in
-  `pnpl.tasks.gwilliams2022` (`PhonemeClassification`, `WordDetection`).
+  `pnpl.tasks.gwilliams2022` (`PhonemeClassification`, `WordClassification`).
 - `preprocessing` — pipeline string used in derivative filenames
   (e.g. `"notch+bp+ds"`). Set to `None` to materialize H5 from the raw
   KIT recording without filtering.
@@ -77,10 +77,10 @@ prints a warning.
 ## Available tasks
 
 ```python
-from pnpl.tasks.gwilliams2022 import PhonemeClassification, WordDetection
+from pnpl.tasks.gwilliams2022 import PhonemeClassification, WordClassification
 ```
 
 - `PhonemeClassification(tmin, tmax, label_type="phoneme" | "voicing")`
   — sample windowed around each phoneme onset.
-- `WordDetection(tmin, tmax, require_pronounced=True)` — sample
+- `WordClassification(tmin, tmax, require_pronounced=True)` — sample
   windowed around each word onset; label is the word string.

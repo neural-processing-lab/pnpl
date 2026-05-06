@@ -44,12 +44,12 @@ module.
    pnpl.tasks.base.TaskProtocol
    pnpl.tasks.libribrain.SpeechDetection
    pnpl.tasks.libribrain.PhonemeClassification
-   pnpl.tasks.libribrain.WordDetection
+   pnpl.tasks.libribrain.WordClassification
    pnpl.tasks.gwilliams2022.PhonemeClassification
-   pnpl.tasks.gwilliams2022.WordDetection
+   pnpl.tasks.gwilliams2022.WordClassification
    pnpl.tasks.armeni2022.PhonemeClassification
    pnpl.tasks.schoffelen2019.TrialEpoching
-   pnpl.tasks.pallier2025.WordDetection
+   pnpl.tasks.pallier2025.WordClassification
 ```
 
 ## Preprocessing

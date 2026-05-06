@@ -53,7 +53,7 @@ default `label_info` implementation if you set `_classes` /
 from pnpl.tasks import (
     SpeechDetection,
     PhonemeClassification,
-    WordDetection,
+    WordClassification,
 )
 ```
 
@@ -65,7 +65,7 @@ from pnpl.tasks import (
   *speech* / *silence*. Returns a per-time-point label array.
 - `PhonemeClassification(tmin, tmax, label_type="phoneme" | "voicing", exclude_phonemes=[])`
   — sample windowed around each phoneme onset.
-- `WordDetection(tmin, tmax, min_word_length=1, max_word_length=None, keyword_detection=None)`
+- `WordClassification(tmin, tmax, min_word_length=1, max_word_length=None, keyword_detection=None)`
   — multi-class word classification *or* binary keyword detection
   (`keyword_detection="cat"` → 1 if the window's word is `"cat"`, else
   0). `tmin` / `tmax` may be `None` to auto-compute from word duration.
@@ -73,12 +73,12 @@ from pnpl.tasks import (
 ## MEG-MASC tasks (Gwilliams 2022)
 
 ```python
-from pnpl.tasks.gwilliams2022 import PhonemeClassification, WordDetection
+from pnpl.tasks.gwilliams2022 import PhonemeClassification, WordClassification
 ```
 
 - `PhonemeClassification(tmin, tmax, label_type="phoneme" | "voicing")`
   — phoneme-aligned epochs from the MEG-MASC events.tsv.
-- `WordDetection(tmin, tmax, require_pronounced=True)` — word-aligned
+- `WordClassification(tmin, tmax, require_pronounced=True)` — word-aligned
   epochs; label is the lower-cased word string.
 
 ## Armeni 2022 tasks
@@ -94,10 +94,10 @@ from pnpl.tasks.armeni2022 import PhonemeClassification
 ## Pallier 2025 (LittlePrince Listen) tasks
 
 ```python
-from pnpl.tasks.pallier2025 import WordDetection
+from pnpl.tasks.pallier2025 import WordClassification
 ```
 
-- `WordDetection(tmin, tmax, min_word_length, max_word_length, keep_top_k)`
+- `WordClassification(tmin, tmax, min_word_length, max_word_length, keep_top_k)`
   — windowed around each word onset (`trial_type='Word'` rows in the
   events.tsv). Default `tmin=0.0`, `tmax=3.0` matches the d'Ascoli et
   al. (Nat Commun 2025) recipe. `keep_top_k` restricts the label

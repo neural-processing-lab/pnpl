@@ -1,5 +1,5 @@
 """
-Word Detection/Classification Task for LibriBrain.
+Word Classification Task for LibriBrain.
 
 Supports multi-class word classification or binary keyword detection.
 """
@@ -10,10 +10,10 @@ import pandas as pd
 
 
 @dataclass
-class WordDetection:
+class WordClassification:
     """
-    Word classification/detection task.
-    
+    Word classification task.
+
     Can operate in two modes:
     1. Multi-class: Classify all words
     2. Keyword detection: Binary classification for specific keyword(s)
@@ -168,4 +168,12 @@ class WordDetection:
         else:
             # Multi-class: word ID
             return self._word_to_id.get(word, 0)
+
+
+# Backwards-compatible alias for code written against pnpl <= 0.1.0
+# (when this task was named ``WordDetection``).
+WordDetection = WordClassification
+
+
+__all__ = ["WordClassification", "WordDetection"]
 

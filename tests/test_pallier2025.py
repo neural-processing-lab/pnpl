@@ -1,7 +1,7 @@
 """Offline tests for the Pallier2025 (OpenNeuro ds007523) loader.
 
 Live network tests are gated behind ``PNPL_OPENNEURO_LIVE=1``. Without
-that, these cover imports, MRO, constants, and the WordDetection task
+that, these cover imports, MRO, constants, and the WordClassification task
 running against a hand-crafted events.tsv.
 """
 
@@ -91,7 +91,7 @@ def test_openneuro_url_join():
 # ---------------------------------------------------------------------------
 
 def test_word_detection_collect_samples(tmp_path):
-    from pnpl.tasks.pallier2025 import WordDetection
+    from pnpl.tasks.pallier2025 import WordClassification
 
     events_path = tmp_path / "events.tsv"
     events_path.write_text(
@@ -110,7 +110,7 @@ def test_word_detection_collect_samples(tmp_path):
         def get_events_path(self, *a, **k):
             return str(events_path)
 
-    task = WordDetection(tmin=0.0, tmax=3.0)
+    task = WordClassification(tmin=0.0, tmax=3.0)
     samples = task.collect_samples(FakeDataset())
     words = [s[5] for s in samples]
     assert words == ["lorsque", "j", "avais", "lorsque"]
@@ -119,7 +119,7 @@ def test_word_detection_collect_samples(tmp_path):
 
 
 def test_word_detection_min_word_length_filter(tmp_path):
-    from pnpl.tasks.pallier2025 import WordDetection
+    from pnpl.tasks.pallier2025 import WordClassification
 
     events_path = tmp_path / "events.tsv"
     events_path.write_text(
@@ -136,7 +136,7 @@ def test_word_detection_min_word_length_filter(tmp_path):
         def get_events_path(self, *a, **k):
             return str(events_path)
 
-    task = WordDetection(min_word_length=2)
+    task = WordClassification(min_word_length=2)
     samples = task.collect_samples(FakeDataset())
     words = [s[5] for s in samples]
     assert "j" not in words
@@ -145,7 +145,7 @@ def test_word_detection_min_word_length_filter(tmp_path):
 
 
 def test_word_detection_keep_top_k(tmp_path):
-    from pnpl.tasks.pallier2025 import WordDetection
+    from pnpl.tasks.pallier2025 import WordClassification
 
     events_path = tmp_path / "events.tsv"
     # 'lorsque' x3, 'j' x2, 'avais' x1 — top-2 should drop 'avais'
@@ -165,7 +165,7 @@ def test_word_detection_keep_top_k(tmp_path):
         def get_events_path(self, *a, **k):
             return str(events_path)
 
-    task = WordDetection(keep_top_k=2)
+    task = WordClassification(keep_top_k=2)
     samples = task.collect_samples(FakeDataset())
     words = sorted({s[5] for s in samples})
     assert words == ["j", "lorsque"]
@@ -178,12 +178,12 @@ def test_word_detection_keep_top_k(tmp_path):
 
 def test_pallier2025_no_local_data_raises(tmp_path):
     from pnpl.datasets.pallier2025 import Pallier2025
-    from pnpl.tasks.pallier2025 import WordDetection
+    from pnpl.tasks.pallier2025 import WordClassification
 
     with pytest.raises((FileNotFoundError, ValueError)):
         Pallier2025(
             data_path=str(tmp_path / "nope"),
-            task=WordDetection(),
+            task=WordClassification(),
             include_subjects=["01"],
             include_runs=["01"],
             download=False,

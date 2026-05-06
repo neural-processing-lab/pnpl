@@ -9,7 +9,7 @@ import numpy as np
 from typing import Optional
 
 from .dataset import LibriBrain
-from ...tasks.libribrain import SpeechDetection, PhonemeClassification, WordDetection
+from ...tasks.libribrain import SpeechDetection, PhonemeClassification, WordClassification
 
 
 class LibriBrainSpeech(LibriBrain):
@@ -215,7 +215,7 @@ class LibriBrainWord(LibriBrain):
         negative_buffer: float = 0.0,
         positive_buffer: float = 0.0,
     ):
-        task = WordDetection(
+        task = WordClassification(
             tmin=tmin,
             tmax=tmax,
             min_word_length=min_word_length,

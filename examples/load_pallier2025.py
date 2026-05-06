@@ -17,11 +17,11 @@ Run from a fresh machine:
 from __future__ import annotations
 
 from pnpl.datasets import Pallier2025
-from pnpl.tasks.pallier2025 import WordDetection
+from pnpl.tasks.pallier2025 import WordClassification
 
 
 def main():
-    task = WordDetection(tmin=0.0, tmax=3.0)
+    task = WordClassification(tmin=0.0, tmax=3.0)
 
     dataset = Pallier2025(
         data_path="./data/pallier2025",

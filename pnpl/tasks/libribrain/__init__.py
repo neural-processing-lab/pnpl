@@ -15,10 +15,11 @@ except Exception:
 
 from .speech_detection import SpeechDetection
 from .phoneme_classification import PhonemeClassification
-from .word_detection import WordDetection
+from .word_classification import WordClassification, WordDetection
 
 __all__ = [
     "SpeechDetection",
     "PhonemeClassification",
+    "WordClassification",
     "WordDetection",
 ]
