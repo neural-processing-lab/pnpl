@@ -37,9 +37,10 @@ class LibriBrain100(LibriBrain100Base):
             ``"val"``/``"valid"`` accepted. ``None`` means "no
             partition filter — apply only the explicit selectors".
         subjects: Subject selector. Accepts ``"all"`` (default),
-            ``"new"`` / ``"broad"`` (sub-1..32), ``"deep"``
-            (sub-0), an int, a string id (``"0"`` or ``"sub-0"``), or a
-            list / range of ids.
+            ``"deep"`` (sub-0, the deep single-subject component),
+            ``"broad"`` (sub-1..32, the broad multi-subject
+            component), an int, a string id (``"0"`` or ``"sub-0"``),
+            or a list / range of ids.
         corpus: Corpus selector. Accepts ``"all"`` (default),
             ``"sherlock"``, ``"timit"``, ``"mocha"``,
             ``"podcasts"`` (aliases like ``"mocha-timit"``,
@@ -62,13 +63,13 @@ class LibriBrain100(LibriBrain100Base):
 
     Notes:
         - The multi-subject (broad) data has no train partition by
-          design; ``subjects="new" + partition="train"`` raises
+          design; ``subjects="broad" + partition="train"`` raises
           :class:`ValueError`. For SFT workflows on broad subjects, use
           ``partition="validation"`` as your fine-tuning training set
           and ``partition="test"`` for evaluation.
-        - Multi-subject data lives only in the Sherlock corpus;
-          ``subjects="new" + corpus="timit"`` (or any non-Sherlock)
-          raises :class:`ValueError`.
+        - Multi-subject data was only collected with the Sherlock
+          stimuli; ``subjects="broad" + corpus="timit"`` (or any
+          non-Sherlock corpus) raises :class:`ValueError`.
 
     Example:
         >>> from pnpl.datasets import LibriBrain100

@@ -56,9 +56,8 @@ def normalize_subjects(subjects: SubjectsArg) -> set[str]:
 
     Accepted forms:
       - ``"all"`` — every subject (sub-0 + sub-1..32)
-      - ``"new"`` — sub-1..32 only (no sub-0)
-      - ``"deep"`` — alias for sub-0
-      - ``"broad"`` — alias for sub-1..32
+      - ``"deep"`` — sub-0 (the deep single-subject component)
+      - ``"broad"`` — sub-1..32 (the broad multi-subject component)
       - ``0`` / ``"0"`` / ``"sub-0"`` — single subject
       - any iterable / range of ints or string ids
     """
@@ -68,7 +67,7 @@ def normalize_subjects(subjects: SubjectsArg) -> set[str]:
         token = subjects.strip().lower()
         if token == "all":
             return set(SUBJECTS)
-        if token == "new" or token == "broad":
+        if token == "broad":
             return set(NEW_SUBJECTS)
         if token == "deep":
             return {DEEP_SUBJECT}
@@ -167,7 +166,7 @@ def validate_selector_combination(
 
     if only_new and partition == PARTITION_TRAIN:
         raise ValueError(
-            "subjects='new' (or any selection without subject 0) has no "
+            "subjects='broad' (or any selection without subject 0) has no "
             "train partition by design — sub-1..32 contribute Sherlock1 "
             "ses-11 (validation) and ses-12 (test) only. For a "
             "supervised-fine-tuning workflow on the broad subjects, "

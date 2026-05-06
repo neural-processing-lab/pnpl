@@ -55,7 +55,6 @@ def test_libribrain100_mro():
 def test_normalize_subjects_aliases():
     from pnpl.datasets.libribrain100 import normalize_subjects
     assert normalize_subjects("all") == {str(i) for i in range(33)}
-    assert normalize_subjects("new") == {str(i) for i in range(1, 33)}
     assert normalize_subjects("broad") == {str(i) for i in range(1, 33)}
     assert normalize_subjects("deep") == {"0"}
     assert normalize_subjects(0) == {"0"}
@@ -70,6 +69,8 @@ def test_normalize_subjects_rejects_unknown():
     from pnpl.datasets.libribrain100 import normalize_subjects
     with pytest.raises(ValueError):
         normalize_subjects("not-a-subject")
+    with pytest.raises(ValueError):
+        normalize_subjects("new")  # was an alias in the first pass; intentionally dropped
     with pytest.raises(ValueError):
         normalize_subjects(-1)
     with pytest.raises(ValueError):
@@ -116,7 +117,7 @@ def test_normalize_partition_aliases():
 # Selector validation
 # ---------------------------------------------------------------------------
 
-def test_validate_rejects_new_with_train():
+def test_validate_rejects_broad_with_train():
     from pnpl.datasets.libribrain100 import (
         normalize_corpus,
         normalize_subjects,
@@ -124,13 +125,13 @@ def test_validate_rejects_new_with_train():
     )
     with pytest.raises(ValueError, match="train partition"):
         validate_selector_combination(
-            subjects=normalize_subjects("new"),
+            subjects=normalize_subjects("broad"),
             corpus=normalize_corpus("sherlock"),
             partition="train",
         )
 
 
-def test_validate_rejects_new_with_non_sherlock():
+def test_validate_rejects_broad_with_non_sherlock():
     from pnpl.datasets.libribrain100 import (
         normalize_corpus,
         normalize_subjects,
@@ -138,7 +139,7 @@ def test_validate_rejects_new_with_non_sherlock():
     )
     with pytest.raises(ValueError, match="non-deep"):
         validate_selector_combination(
-            subjects=normalize_subjects("new"),
+            subjects=normalize_subjects("broad"),
             corpus=normalize_corpus("timit"),
             partition=None,
         )
