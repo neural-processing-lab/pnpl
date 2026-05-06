@@ -76,7 +76,7 @@ SHERLOCK_TASKS = tuple(f"Sherlock{i}" for i in range(1, 10))   # Sherlock1..Sher
 
 TIMIT_TASK = "TIMIT"
 MOCHATIMIT_TASK = "MOCHATIMIT"
-PODCASTS_TASK = "Podcasts"
+PODCASTS_TASK = "TheMoth"   # HF folder name; user-facing corpus is "podcasts"
 
 # Map task token → corpus.
 TASK_TO_CORPUS: dict[str, str] = {

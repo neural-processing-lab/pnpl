@@ -135,18 +135,14 @@ def _build_libribrain_sherlock_records() -> list[RunRecord]:
 # ---------------------------------------------------------------------------
 # Sherlock8 / Sherlock9 — sub-0, LibriBrain2 release.
 #
-# The HF tree shows Sherlock8 with ses-1..10 currently. Sherlock9 is
-# expected to follow the same one-session-per-LibriVox-track pattern as
-# the other books in the canon; we approximate with ses-1..12 and
-# tolerate gaps at runtime. Both are entirely train (all-canon Sherlock
-# val/test live in book 1 already).
+# Sherlock8 has ses-1..10. Sherlock9 starts at ses-0 (the book's preface
+# track on LibriVox) and runs through ses-12. Both are entirely train
+# (all-canon Sherlock val/test live in book 1 already).
 # ---------------------------------------------------------------------------
 
 _LIBRIBRAIN2_SHERLOCK_SESSION_RUNS: dict[str, tuple[tuple[str, str], ...]] = {
     "Sherlock8": tuple((str(i), "1") for i in range(1, 11)),
-    # Sherlock9 session count is approximate; will be reconciled with the
-    # final upload. Missing sessions are skipped at load time.
-    "Sherlock9": tuple((str(i), "1") for i in range(1, 13)),
+    "Sherlock9": tuple((str(i), "1") for i in range(0, 13)),
 }
 
 
@@ -171,32 +167,20 @@ def _build_libribrain2_sherlock_records() -> list[RunRecord]:
 # ---------------------------------------------------------------------------
 # TIMIT — sub-0, LibriBrain2 release.
 #
-# Per the paper (Sec. 3.2), the standard split follows TIMIT's official
-# core test set + Kaldi 50-speaker dev set, applied at the utterance
-# level. The MEG-side session count is not yet visible on HF; we
-# placeholder with ses-1..10 and assign one session each to val/test.
-# Final per-utterance filtering will happen at the events level once
-# the upload exposes the per-utterance metadata.
+# 14 sessions on HF. Per the paper (Sec. 3.2), the standard TIMIT split
+# is utterance-level (24-speaker core test, 50-speaker Kaldi dev), so
+# session-level partitioning here would be too coarse. We assign every
+# session to ``train`` and rely on event-level filtering (in events.tsv
+# rows) to surface the standard val/test subsets — to be wired up once
+# the per-utterance metadata is finalized in the released events files.
 # ---------------------------------------------------------------------------
 
-_TIMIT_TRAIN_SESSIONS = tuple(str(i) for i in range(1, 9))
-_TIMIT_VAL_SESSIONS = ("9",)
-_TIMIT_TEST_SESSIONS = ("10",)
-
-
-def _timit_partition(session: str) -> str:
-    if session in _TIMIT_VAL_SESSIONS:
-        return PARTITION_VALIDATION
-    if session in _TIMIT_TEST_SESSIONS:
-        return PARTITION_TEST
-    return PARTITION_TRAIN
+_TIMIT_SESSIONS = tuple(str(i) for i in range(1, 15))
 
 
 def _build_timit_records() -> list[RunRecord]:
     out: list[RunRecord] = []
-    for ses in (
-        _TIMIT_TRAIN_SESSIONS + _TIMIT_VAL_SESSIONS + _TIMIT_TEST_SESSIONS
-    ):
+    for ses in _TIMIT_SESSIONS:
         out.append(
             RunRecord(
                 subject=DEEP_SUBJECT,
@@ -205,7 +189,7 @@ def _build_timit_records() -> list[RunRecord]:
                 run="1",
                 corpus=CORPUS_TIMIT,
                 repo=REPO_KEY_LIBRIBRAIN2,
-                partition=_timit_partition(ses),
+                partition=PARTITION_TRAIN,
             )
         )
     return out
