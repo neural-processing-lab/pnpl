@@ -40,13 +40,13 @@ except Exception:
     pass
 
 # Public submodules
-__all__ = ["datasets", "tasks", "preprocessing"]
+__all__ = ["datasets", "tasks", "preprocessing", "competition"]
 
 # 2) Optional lazy access to dataset exports at the top-level. We avoid
 # importing subpackages eagerly to keep `import pnpl` lightweight.
 def __getattr__(name):  # pragma: no cover - import-time hook
     # Try public submodules first
-    if name in ("datasets", "tasks", "preprocessing"):
+    if name in ("datasets", "tasks", "preprocessing", "competition"):
         from importlib import import_module
         return import_module(f"pnpl.{name}")
 
