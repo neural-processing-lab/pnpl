@@ -14,8 +14,20 @@ from .submission import (
     submit_to_kaggle,
     write_submission,
 )
+from .holdout import (
+    BROAD_SUBJECTS,
+    DEEP_SUBJECTS,
+    HOLDOUT_REPO,
+    N_SUBJECTS,
+    SOURCES,
+    TRACKS,
+    WINDOW_SECONDS,
+    HoldoutError,
+    LibriBrainCompetitionHoldout,
+)
 
 __all__ = [
+    # submission format + upload
     "PRIMARY_VOCAB",
     "SECONDARY_VOCAB",
     "SECONDARY_VOCAB_PREFIX",
@@ -23,4 +35,14 @@ __all__ = [
     "load_vocabulary",
     "submit_to_kaggle",
     "write_submission",
+    # holdout data -> canonical rows
+    "LibriBrainCompetitionHoldout",
+    "HoldoutError",
+    "TRACKS",
+    "DEEP_SUBJECTS",
+    "BROAD_SUBJECTS",
+    "SOURCES",
+    "N_SUBJECTS",
+    "HOLDOUT_REPO",
+    "WINDOW_SECONDS",
 ]
