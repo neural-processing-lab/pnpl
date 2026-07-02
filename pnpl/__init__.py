@@ -19,7 +19,7 @@ Example usage:
     speech = LibriBrainSpeech(data_path="./data", partition="train")
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 # Load environment variables from a local `.env` (if present). This keeps
 # configuration ergonomic for users while remaining lightweight (stdlib-only).
