@@ -196,6 +196,117 @@ def write_submission(
     return out
 
 
+_SUCCESS_MARKER = "successfully submitted"
+_VERSION_WARNING = "looks like you're using an outdated"
+_AUTH_MARKERS = (
+    "kaggle.json", "could not find kaggle", "unauthorized", "forbidden",
+    "401", "403", "invalid api", "authenticat", "credential",
+    "kaggle_username", "api token", "access token",
+)
+
+_MISSING_CREDENTIALS_HELP = (
+    "No Kaggle credentials found. Set up any one of these, then retry:\n"
+    "  1. KAGGLE_API_TOKEN=KGAT_...  — create a token at "
+    "https://www.kaggle.com/settings/api (needs kaggle CLI >= 2.0)\n"
+    "  2. KAGGLE_USERNAME + KAGGLE_KEY  environment variables\n"
+    "  3. ~/.kaggle/kaggle.json  — 'Create New API Token' on the same page\n"
+    "On Colab, keep the token in a secret and export it as KAGGLE_API_TOKEN, "
+    "or call submit_to_kaggle(..., api_token=...)."
+)
+
+
+def _kaggle_config_dir() -> Path:
+    return Path(os.environ.get("KAGGLE_CONFIG_DIR", str(Path.home() / ".kaggle")))
+
+
+def _have_kaggle_credentials(api_token: Optional[str]) -> bool:
+    """Mirror the kaggle CLI's own credential resolution, so we can fail fast."""
+    if api_token or os.environ.get("KAGGLE_API_TOKEN"):
+        return True
+    if os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY"):
+        return True
+    cfg = _kaggle_config_dir()
+    return (cfg / "kaggle.json").is_file() or (cfg / "access_token").is_file()
+
+
+def _meaningful_lines(output: str) -> "list[str]":
+    """Non-empty CLI lines, minus the noisy 'outdated kaggle version' warning."""
+    return [
+        line.strip()
+        for line in output.splitlines()
+        if line.strip() and _VERSION_WARNING not in line.lower()
+    ]
+
+
+def _summarize_output(output: str, success: bool) -> str:
+    lines = _meaningful_lines(output)
+    if not lines:
+        return ""
+    if success:
+        for line in lines:
+            if _SUCCESS_MARKER in line.lower():
+                return line
+    return lines[-1]
+
+
+def _diagnose_failure(output: str, returncode: Optional[int]) -> str:
+    low = output.lower()
+    if any(marker in low for marker in _AUTH_MARKERS):
+        return (
+            "Kaggle could not authenticate — credentials are missing or invalid. "
+            "Check KAGGLE_API_TOKEN (needs kaggle CLI >= 2.0) or "
+            "~/.kaggle/kaggle.json, and regenerate at "
+            "https://www.kaggle.com/settings/api."
+        )
+    return _summarize_output(output, success=False) or (
+        f"the kaggle CLI exited with status {returncode}."
+    )
+
+
+class KaggleSubmissionResult:
+    """Outcome of :func:`submit_to_kaggle`, with a readable one-line summary.
+
+    Truthy on success (``bool(result)`` / ``if result:``). ``detail`` holds
+    Kaggle's own response line (e.g. ``"Successfully submitted to PNPL
+    Competition 2026"``) or, on failure, a short reason. The raw
+    :class:`subprocess.CompletedProcess` is available as ``.process`` (with
+    ``.stdout`` / ``.stderr`` / ``.returncode`` re-exported for convenience).
+    """
+
+    def __init__(self, *, success, competition, file, message, detail, process):
+        self.success = bool(success)
+        self.competition = competition
+        self.file = str(file)
+        self.message = message
+        self.detail = detail
+        self.process = process
+
+    @property
+    def returncode(self) -> Optional[int]:
+        return self.process.returncode if self.process is not None else None
+
+    @property
+    def stdout(self) -> str:
+        return self.process.stdout if self.process is not None else ""
+
+    @property
+    def stderr(self) -> str:
+        return self.process.stderr if self.process is not None else ""
+
+    def __bool__(self) -> bool:
+        return self.success
+
+    def __repr__(self) -> str:
+        icon = "✅" if self.success else "❌"  # ✅ / ❌
+        head = "Submitted" if self.success else "Submission failed"
+        line = f"{icon} {head}: {os.path.basename(self.file)} → {self.competition}"
+        if self.detail:
+            line += f"\n   {self.detail}"
+        return line
+
+    __str__ = __repr__
+
+
 def submit_to_kaggle(
     csv_path: Union[str, Path],
     competition: str,
@@ -205,7 +316,8 @@ def submit_to_kaggle(
     kaggle_bin: Optional[str] = None,
     timeout: float = 180.0,
     check: bool = True,
-) -> subprocess.CompletedProcess:
+    verbose: bool = True,
+) -> "KaggleSubmissionResult":
     """Upload ``csv_path`` to a Kaggle competition via the ``kaggle`` CLI.
 
     The function shells out to the official Kaggle CLI so that all of its
@@ -236,16 +348,27 @@ def submit_to_kaggle(
     timeout:
         Seconds before the subprocess is killed.
     check:
-        If ``True``, raise :class:`SubmissionError` on a non-zero exit.
+        If ``True`` (default), raise :class:`SubmissionError` when the
+        submission does not succeed. If ``False``, return a
+        :class:`KaggleSubmissionResult` with ``success=False`` instead of
+        raising, so you can inspect ``.detail`` / ``.stderr`` yourself.
+    verbose:
+        If ``True`` (default), print a one-line status summary.
 
     Returns
     -------
-    subprocess.CompletedProcess
-        The result of the CLI call, with ``stdout`` / ``stderr`` captured.
+    KaggleSubmissionResult
+        A truthy-on-success object with a readable summary. Kaggle's response
+        line is on ``.detail``; the raw CLI call is on ``.process``.
     """
     csv_path = Path(csv_path).expanduser().resolve()
     if not csv_path.is_file():
         raise SubmissionError(f"Submission file not found: {csv_path}")
+
+    # Fail fast with actionable guidance instead of letting the kaggle CLI dump
+    # a traceback when no credentials are configured.
+    if not _have_kaggle_credentials(api_token):
+        raise SubmissionError(_MISSING_CREDENTIALS_HELP)
 
     if kaggle_bin:
         cmd_prefix = [kaggle_bin]
@@ -253,14 +376,17 @@ def submit_to_kaggle(
         # Use the kaggle that ships with the *current* interpreter, not whatever
         # `shutil.which('kaggle')` finds first on PATH (anaconda envs etc. often
         # shadow venv installs with an older, incompatible kaggle binary).
-        try:
-            import kaggle  # noqa: F401
-        except ImportError as e:
+        # Use find_spec rather than `import kaggle`: importing the package
+        # authenticates eagerly and raises if no credentials are configured, so
+        # importing here just to check availability would blow up spuriously.
+        import importlib.util
+
+        if importlib.util.find_spec("kaggle") is None:
             raise SubmissionError(
                 "The 'kaggle' package is not installed in this interpreter "
                 f"({sys.executable}). Install it with "
                 "`pip install -U kaggle` (>= 2.0 for KAGGLE_API_TOKEN support)."
-            ) from e
+            )
         # The kaggle package has no top-level __main__; the CLI entry point is
         # in kaggle.cli, so invoke that module directly.
         cmd_prefix = [sys.executable, "-m", "kaggle.cli"]
@@ -290,15 +416,32 @@ def submit_to_kaggle(
             check=False,
         )
     except FileNotFoundError as e:
-        raise SubmissionError(f"Failed to invoke kaggle CLI: {e}") from e
+        raise SubmissionError(f"Failed to invoke the kaggle CLI: {e}") from e
     except subprocess.TimeoutExpired as e:
-        raise SubmissionError(f"kaggle submit timed out after {timeout}s") from e
+        raise SubmissionError(f"kaggle submit timed out after {timeout:g}s.") from e
 
-    if check and proc.returncode != 0:
-        raise SubmissionError(
-            f"kaggle submit failed (exit {proc.returncode})\n"
-            f"stdout: {proc.stdout.strip()}\n"
-            f"stderr: {proc.stderr.strip()}"
-        )
+    # The kaggle CLI exits 0 and prints "Successfully submitted ..." to stdout on
+    # success (often preceded by a version-upgrade warning), so key off the
+    # message, not just the return code.
+    output = f"{proc.stdout or ''}\n{proc.stderr or ''}"
+    success = proc.returncode == 0 and _SUCCESS_MARKER in output.lower()
 
-    return proc
+    if not success:
+        reason = _diagnose_failure(output, proc.returncode)
+        if check:
+            raise SubmissionError(f"Kaggle submission failed: {reason}")
+        detail = reason
+    else:
+        detail = _summarize_output(output, success=True)
+
+    result = KaggleSubmissionResult(
+        success=success,
+        competition=competition,
+        file=csv_path,
+        message=message,
+        detail=detail,
+        process=proc,
+    )
+    if verbose:
+        print(repr(result))
+    return result
