@@ -6,6 +6,7 @@ parts:
       - file: install
       - file: quickstart
       - file: datasets
+      - file: competition
   - caption: Datasets
     chapters:
       - file: libribrain
