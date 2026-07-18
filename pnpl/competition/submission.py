@@ -307,6 +307,45 @@ class KaggleSubmissionResult:
     __str__ = __repr__
 
 
+# Kaggle competition slugs for the PNPL 2026 tracks, selectable by short track name
+# so callers need not remember the full slug. Any other value (a full slug or a Kaggle
+# URL) is accepted too and used as-is, so the competition can always be overridden.
+PNPL_2026_COMPETITIONS = {
+    "deep": "pnpl-competition-2026-deep",
+    "broad": "pnpl-competition-2026-broad",
+}
+
+
+def resolve_competition(competition: str) -> str:
+    """Resolve a competition identifier to its Kaggle slug.
+
+    Accepts, in order of precedence:
+
+    * a short track name -- ``"deep"`` / ``"broad"`` -> the hardcoded 2026 slug,
+    * a full Kaggle URL  -- ``https://www.kaggle.com/competitions/<slug>/`` -> ``<slug>``,
+    * any other string   -- returned unchanged (an explicit override).
+
+    >>> resolve_competition("deep")
+    'pnpl-competition-2026-deep'
+    >>> resolve_competition("https://www.kaggle.com/competitions/pnpl-competition-2026-broad/")
+    'pnpl-competition-2026-broad'
+    >>> resolve_competition("some-other-competition")
+    'some-other-competition'
+    """
+    key = str(competition).strip()
+    low = key.lower()
+    if low in PNPL_2026_COMPETITIONS:
+        return PNPL_2026_COMPETITIONS[low]
+    if "kaggle.com" in low:
+        segs = [s for s in key.rstrip("/").split("/") if s]
+        if "competitions" in segs:
+            i = segs.index("competitions")
+            if i + 1 < len(segs):
+                return segs[i + 1]
+        return segs[-1] if segs else key
+    return key
+
+
 def submit_to_kaggle(
     csv_path: Union[str, Path],
     competition: str,
@@ -333,7 +372,10 @@ def submit_to_kaggle(
     csv_path:
         Path to the submission CSV.
     competition:
-        Competition slug (e.g. ``"pnpl-internal-testing"``).
+        Which competition to submit to. A short track name ``"deep"`` or
+        ``"broad"`` maps to the 2026 slug (see :data:`PNPL_2026_COMPETITIONS`);
+        a full slug (e.g. ``"pnpl-internal-testing"``) or a Kaggle competition
+        URL is also accepted and used as-is (see :func:`resolve_competition`).
     message:
         Optional submission description shown on Kaggle.
     api_token:
@@ -364,6 +406,9 @@ def submit_to_kaggle(
     csv_path = Path(csv_path).expanduser().resolve()
     if not csv_path.is_file():
         raise SubmissionError(f"Submission file not found: {csv_path}")
+
+    # Accept a short track name ("deep"/"broad") or a full Kaggle URL, not just a slug.
+    competition = resolve_competition(competition)
 
     # Fail fast with actionable guidance instead of letting the kaggle CLI dump
     # a traceback when no credentials are configured.

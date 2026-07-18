@@ -5,8 +5,10 @@ import subprocess
 import pytest
 
 from pnpl.competition import (
+    PNPL_2026_COMPETITIONS,
     KaggleSubmissionResult,
     SubmissionError,
+    resolve_competition,
     submit_to_kaggle,
 )
 from pnpl.competition import submission as sub
@@ -146,3 +148,40 @@ def test_submit_exit0_without_marker_is_failure(monkeypatch, csv_file):
     monkeypatch.setattr(sub.subprocess, "run", _fake_run(0, "Some error, not submitted", ""))
     res = submit_to_kaggle(csv_file, "c", kaggle_bin="kaggle", check=False, verbose=False)
     assert res.success is False
+
+
+# -- competition shorthand resolution --------------------------------------
+
+def test_resolve_competition_shorthand():
+    assert resolve_competition("deep") == "pnpl-competition-2026-deep"
+    assert resolve_competition("broad") == "pnpl-competition-2026-broad"
+    assert resolve_competition("DEEP") == PNPL_2026_COMPETITIONS["deep"]
+    assert resolve_competition("  Broad ") == PNPL_2026_COMPETITIONS["broad"]
+
+
+def test_resolve_competition_url():
+    base = "https://www.kaggle.com/competitions/"
+    assert resolve_competition(base + "pnpl-competition-2026-deep/") == "pnpl-competition-2026-deep"
+    assert resolve_competition(base + "pnpl-competition-2026-broad") == "pnpl-competition-2026-broad"
+    assert resolve_competition(base + "some-comp/overview") == "some-comp"
+
+
+def test_resolve_competition_passthrough():
+    # A full slug (an explicit override) is returned unchanged.
+    assert resolve_competition("pnpl-internal-testing") == "pnpl-internal-testing"
+    assert resolve_competition("pnpl-competition-2026") == "pnpl-competition-2026"
+
+
+def test_submit_resolves_shorthand_in_cli(monkeypatch, csv_file):
+    # submit_to_kaggle maps "deep" -> the slug and passes THAT to `kaggle ... -c <slug>`.
+    monkeypatch.setenv("KAGGLE_API_TOKEN", "KGAT_fake")
+    seen = {}
+
+    def record(*args, **kwargs):
+        seen["cmd"] = list(args[0]) if args else list(kwargs["args"])
+        return subprocess.CompletedProcess(seen["cmd"], 0, SUCCESS_STDOUT, SUCCESS_STDERR)
+
+    monkeypatch.setattr(sub.subprocess, "run", record)
+    res = submit_to_kaggle(csv_file, competition="deep", kaggle_bin="kaggle", check=False)
+    assert res.success and res.competition == "pnpl-competition-2026-deep"
+    assert seen["cmd"][seen["cmd"].index("-c") + 1] == "pnpl-competition-2026-deep"

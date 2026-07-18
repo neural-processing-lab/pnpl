@@ -6,12 +6,14 @@ competition. See :func:`write_submission` and :func:`submit_to_kaggle`.
 """
 
 from .submission import (
+    PNPL_2026_COMPETITIONS,
     PRIMARY_VOCAB,
     SECONDARY_VOCAB,
     SECONDARY_VOCAB_PREFIX,
     KaggleSubmissionResult,
     SubmissionError,
     load_vocabulary,
+    resolve_competition,
     submit_to_kaggle,
     write_submission,
 )
@@ -36,6 +38,8 @@ __all__ = [
     "KaggleSubmissionResult",
     "load_vocabulary",
     "submit_to_kaggle",
+    "resolve_competition",
+    "PNPL_2026_COMPETITIONS",
     "write_submission",
     # holdout data -> canonical rows
     "LibriBrainCompetitionHoldout",
