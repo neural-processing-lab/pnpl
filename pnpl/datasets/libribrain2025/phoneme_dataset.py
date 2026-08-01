@@ -145,12 +145,12 @@ if __name__ == "__main__":
 
     start_time = time.time()
     val_dataset = LibriBrainPhoneme(
-        data_path="/Users/mirgan/LibriBrain/serialized/",
+        data_path="./data/libribrain",
         partition="validation",
         preload_files=False,
     )
     test_dataset = LibriBrainPhoneme(
-        data_path="/Users/mirgan/LibriBrain/serialized/",
+        data_path="./data/libribrain",
         partition="test",
         preload_files=False,
     )

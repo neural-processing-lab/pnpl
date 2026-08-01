@@ -3,7 +3,7 @@ Serialization utilities for converting MNE data to H5 format.
 
 Provides functions to convert:
 - Continuous Raw data to H5 (LibriBrain-style)
-- Epoched data to H5 (MegNIST-style)
+- Epoched data to H5 (trial-wise)
 """
 
 import os

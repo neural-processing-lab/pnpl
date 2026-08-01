@@ -14,7 +14,6 @@ class HDF5Dataset(Dataset):
 
     def __init__(
         self,
-        # use /data/engs-pnpl/datasets/Sherlock1/derivatives/serialized/default
         data_path: str,
         preprocessing_name: str | None = None,
         tmin: float = -0.2,

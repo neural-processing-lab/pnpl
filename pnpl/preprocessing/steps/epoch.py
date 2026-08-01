@@ -2,7 +2,7 @@
 Epoch Step.
 
 Creates epochs from continuous data based on events.
-This is typically used for MegNIST-style datasets where the final
+This is typically used for datasets where the final
 output should be epoched rather than continuous.
 """
 
@@ -59,7 +59,7 @@ class Epoch(BaseStep):
             verbose=False,
         )
         
-        # Use provided event_id or default MegNIST digits
+        # Use provided event_id, else fall back to the digit event ids
         event_id = self.event_id
         if event_id is None:
             event_id = {

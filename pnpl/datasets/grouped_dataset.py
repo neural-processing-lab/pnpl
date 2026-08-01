@@ -58,28 +58,3 @@ class GroupedDataset(Dataset):
         label = samples[0][1]
 
         return data, label
-
-
-if __name__ == "__main__":
-    # data_path = "/data/engs-pnpl/datasets/Sherlock1/derivatives/preproc"
-    data_path = "/Users/mirgan/Sherlock1/derivatives/serialized/default"
-    events_path = "/Users/mirgan/Sherlock1/"
-    """data_path = "/data/engs-pnpl/datasets/Sherlock1/derivatives/serialized/default"
-    events_path = "/data/engs-pnpl/datasets/Sherlock1/" """
-    preprocessing_name = "bads+headpos+sss+notch+bp+ds"
-    include_subjects = ['0']
-    from pnpl.datasets.parkerjones2025.dataset import ParkerJones2025
-    train_data = ParkerJones2025(
-        data_path, preprocessing_name=preprocessing_name, include_subjects=include_subjects, events_path=events_path,
-        include_runs=["1"],
-        include_sessions=["1"],
-        include_tasks=["Sherlock1"],
-        standardize=True,
-        clipping_factor=10,
-    )
-    grouped_data = GroupedDataset(
-        train_data, grouped_samples=10, average_grouped_samples=False)
-    print(len(train_data))
-    print(len(grouped_data))
-    print(grouped_data[0])
-    print(grouped_data[1])

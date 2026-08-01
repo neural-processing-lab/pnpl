@@ -8,7 +8,7 @@ This mixin handles H5 files with structure:
 - channel_names: (channels,) - Channel names
 - Metadata attributes: sensor_xyz, etc.
 
-Used by MegNIST-style datasets where data is already epoched.
+Used by datasets that ship pre-epoched trials.
 """
 
 import os

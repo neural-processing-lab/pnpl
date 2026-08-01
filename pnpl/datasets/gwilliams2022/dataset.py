@@ -3,7 +3,7 @@ Gwilliams et al. 2022 / MEG-MASC dataset.
 
 Modern, mixin-based wrapper for the MEG-MASC release on OSF
 (https://osf.io/ag3kj/, https://arxiv.org/abs/2208.11488). Mirrors the
-shape of ``LibriBrain`` and ``RIDDLE``: composes the standard pnpl
+shape of ``LibriBrain``: composes the standard pnpl
 mixins, takes a ``TaskProtocol``-shaped ``task`` object, and supports
 on-demand download via :class:`OSFDownloadMixin`.
 

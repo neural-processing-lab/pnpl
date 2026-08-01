@@ -8,7 +8,7 @@ Provides a modular pipeline for preprocessing raw MEG data:
 - NotchFilter: Remove line noise
 - BandpassFilter: Apply bandpass filtering
 - Downsample: Reduce sampling rate
-- Epoch: Create epochs from continuous data (for MegNIST-style datasets)
+- Epoch: Create epochs from continuous data (for epoched datasets)
 """
 
 try:
