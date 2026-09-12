@@ -22,15 +22,18 @@ class NotchFilter(BaseStep):
     
     Args:
         freqs: Frequencies to notch out (default: [50, 100] Hz for Europe)
+        picks: Channels to filter, as accepted by :meth:`mne.io.Raw.notch_filter`
+            (default: ``"meg"``; use ``"eeg"`` or ``"data"`` for EEG recordings)
     """
     
     step_name: str = "notch"
     freqs: List[float] = field(default_factory=lambda: [50.0, 100.0])
+    picks: Any = "meg"
     
     def apply(self, raw: "mne.io.Raw", context: Dict[str, Any]) -> "mne.io.Raw":
         raw.notch_filter(
             freqs=self.freqs,
-            picks='meg',
+            picks=self.picks,
             verbose=False,
         )
         

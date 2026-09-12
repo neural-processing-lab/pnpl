@@ -23,17 +23,20 @@ class BandpassFilter(BaseStep):
     Args:
         l_freq: Low cutoff frequency (default: 0.1 Hz)
         h_freq: High cutoff frequency (default: 125 Hz)
+        picks: Channels to filter, as accepted by :meth:`mne.io.Raw.filter`
+            (default: ``"meg"``; use ``"eeg"`` or ``"data"`` for EEG recordings)
     """
     
     step_name: str = "bp"
     l_freq: float = 0.1
     h_freq: float = 125.0
+    picks: Any = "meg"
     
     def apply(self, raw: "mne.io.Raw", context: Dict[str, Any]) -> "mne.io.Raw":
         raw.filter(
             l_freq=self.l_freq,
             h_freq=self.h_freq,
-            picks='meg',
+            picks=self.picks,
             verbose=False,
         )
         
