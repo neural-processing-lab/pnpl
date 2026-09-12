@@ -243,6 +243,32 @@ class OhanaDownloadMixin:
         return os.getenv(api_key_env) or os.getenv("API_KEY")
 
     @staticmethod
+    def _rate_limit_wait_seconds(resp: requests.Response, max_wait: float = 3900.0) -> Optional[float]:
+        """Seconds to sleep before retrying a 429, from ``X-RateLimit-Reset``.
+
+        The header carries the reset time as a Unix timestamp (seconds or
+        milliseconds); ``Retry-After`` is honoured too. Returns ``None`` if
+        the wait would exceed ``max_wait`` (or nothing usable was sent).
+        """
+        retry_after = resp.headers.get("Retry-After")
+        reset = resp.headers.get("X-RateLimit-Reset")
+        wait: Optional[float] = None
+        try:
+            if retry_after:
+                wait = float(retry_after)
+            elif reset:
+                reset_f = float(reset)
+                if reset_f > 1e11:  # milliseconds
+                    reset_f /= 1000.0
+                wait = reset_f - time.time()
+        except ValueError:
+            wait = None
+        if wait is None:
+            wait = 60.0
+        wait = max(5.0, wait + 2.0)
+        return wait if wait <= max_wait else None
+
+    @staticmethod
     def _safe_json(resp: requests.Response) -> dict:
         try:
             return resp.json()
@@ -298,8 +324,19 @@ class OhanaDownloadMixin:
                         f"OHANA file not found: '{dataset_slug}/{rel_path}' ({msg})."
                     )
                 if meta_resp.status_code == 429:
-                    msg = cls._safe_json(meta_resp).get("error") or "Rate limit exceeded"
-                    raise RuntimeError(f"OHANA rate limit exceeded: {msg}")
+                    # Per-key hourly download quota. Wait for the window to
+                    # reset (bounded) instead of failing a long-running job;
+                    # large datasets easily exceed the quota in one epoch.
+                    wait_s = cls._rate_limit_wait_seconds(meta_resp)
+                    if wait_s is None or attempt >= max_retries:
+                        msg = cls._safe_json(meta_resp).get("error") or "Rate limit exceeded"
+                        raise RuntimeError(f"OHANA rate limit exceeded: {msg}")
+                    print(
+                        f"OHANA rate limit hit downloading {os.path.basename(fpath)}; "
+                        f"waiting {wait_s:.0f}s for the quota to reset ({attempt}/{max_retries})"
+                    )
+                    time.sleep(wait_s)
+                    continue
                 if meta_resp.status_code >= 500:
                     raise HTTPError(f"OHANA server error {meta_resp.status_code}")
                 meta_resp.raise_for_status()
