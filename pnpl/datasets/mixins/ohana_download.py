@@ -85,7 +85,12 @@ class OhanaDownloadMixin:
 
 
     def prefetch_files(self, file_paths: list[str]) -> None:
-        """Prefetch multiple files in parallel (downloads only missing files)."""
+        """Prefetch multiple files in parallel (downloads only missing files).
+
+        Presigned URLs are requested in bulk through OHANA's batch endpoint
+        (one quota unit per 500 files) and fall back to per-file requests
+        if the batch call is unavailable.
+        """
         futures = []
         needed_files = set()
 
@@ -93,8 +98,9 @@ class OhanaDownloadMixin:
             if not os.path.exists(fpath):
                 needed_files.add(fpath)
 
+        presigned = self._batch_presign(sorted(needed_files)) if len(needed_files) > 1 else {}
         for fpath in needed_files:
-            futures.append(self._schedule_download(fpath))
+            futures.append(self._schedule_download(fpath, download_url=presigned.get(fpath)))
 
         if futures:
             print(f"Downloading {len(futures)} files...")
@@ -148,7 +154,7 @@ class OhanaDownloadMixin:
 
         return future.result()
 
-    def _schedule_download(self, fpath: str):
+    def _schedule_download(self, fpath: str, download_url: Optional[str] = None):
         rel_path = os.path.relpath(fpath, self.data_path).replace(os.path.sep, "/")
         os.makedirs(os.path.dirname(fpath), exist_ok=True)
 
@@ -162,8 +168,38 @@ class OhanaDownloadMixin:
                     base_url=self._resolve_base_url(),
                     dataset_slug=self.OHANA_DATASET_SLUG,
                     api_key_env=getattr(self, "OHANA_API_KEY_ENV", "OHANA_API_KEY"),
+                    download_url=download_url,
                 )
             return self._download_futures[fpath]
+
+    def _batch_presign(self, file_paths: list[str], chunk: int = 500) -> dict:
+        """``{local_path: presigned_url}`` via ``POST /api/download/{slug}/batch``.
+
+        Any failure (older OHANA without the endpoint, network) yields an
+        empty mapping so callers transparently fall back to per-file calls.
+        """
+        if not file_paths or not self.OHANA_DATASET_SLUG:
+            return {}
+        api_key = self._get_api_key(getattr(self, "OHANA_API_KEY_ENV", "OHANA_API_KEY"))
+        headers = {"Accept": "application/json", "Content-Type": "application/json"}
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
+        url = f"{self._resolve_base_url()}/api/download/{quote(self.OHANA_DATASET_SLUG, safe='')}/batch"
+        rel_to_local = {os.path.relpath(p, self.data_path).replace(os.path.sep, "/"): p for p in file_paths}
+        rels = list(rel_to_local)
+        out: dict = {}
+        try:
+            for start in range(0, len(rels), chunk):
+                resp = requests.post(url, headers=headers, json={"paths": rels[start : start + chunk]}, timeout=60)
+                if resp.status_code != 200:
+                    return {}
+                for entry in resp.json().get("files", []):
+                    local = rel_to_local.get(entry.get("path"))
+                    if local and entry.get("downloadUrl"):
+                        out[local] = entry["downloadUrl"]
+        except Exception:
+            return {}
+        return out
 
     @classmethod
     def _resolve_base_url(cls) -> str:
@@ -287,6 +323,7 @@ class OhanaDownloadMixin:
         max_retries: int = 5,
         timeout_meta_s: int = 30,
         timeout_download_s: int = 120,
+        download_url: Optional[str] = None,
     ) -> str:
         if not dataset_slug:
             raise RuntimeError(
@@ -305,10 +342,18 @@ class OhanaDownloadMixin:
         )
         last_exc: Optional[BaseException] = None
 
+        presigned_url = download_url
         for attempt in range(1, max_retries + 1):
             try:
-                meta_resp = requests.get(meta_url, headers=headers, timeout=timeout_meta_s)
-                if meta_resp.status_code == 401:
+                if presigned_url is not None:
+                    # Bulk-presigned URL (see prefetch_files); used once, then
+                    # fall back to the per-file endpoint if it fails/expires.
+                    meta = {"downloadUrl": presigned_url}
+                    presigned_url = None
+                    meta_resp = None
+                else:
+                    meta_resp = requests.get(meta_url, headers=headers, timeout=timeout_meta_s)
+                if meta_resp is not None and meta_resp.status_code == 401:
                     if api_key:
                         raise RuntimeError(
                             f"Unauthorized downloading '{dataset_slug}/{rel_path}' from OHANA with provided API key. "
@@ -318,12 +363,12 @@ class OhanaDownloadMixin:
                         f"Unauthorized downloading '{dataset_slug}/{rel_path}' from OHANA. "
                         f"Set env var {api_key_env} (e.g. 'ohana_...') to access this private dataset."
                     )
-                if meta_resp.status_code == 404:
+                if meta_resp is not None and meta_resp.status_code == 404:
                     msg = cls._safe_json(meta_resp).get("error") or "File not found"
                     raise FileNotFoundError(
                         f"OHANA file not found: '{dataset_slug}/{rel_path}' ({msg})."
                     )
-                if meta_resp.status_code == 429:
+                if meta_resp is not None and meta_resp.status_code == 429:
                     # Per-key hourly download quota. Wait for the window to
                     # reset (bounded) instead of failing a long-running job;
                     # large datasets easily exceed the quota in one epoch.
@@ -337,11 +382,11 @@ class OhanaDownloadMixin:
                     )
                     time.sleep(wait_s)
                     continue
-                if meta_resp.status_code >= 500:
-                    raise HTTPError(f"OHANA server error {meta_resp.status_code}")
-                meta_resp.raise_for_status()
-
-                meta = meta_resp.json()
+                if meta_resp is not None:
+                    if meta_resp.status_code >= 500:
+                        raise HTTPError(f"OHANA server error {meta_resp.status_code}")
+                    meta_resp.raise_for_status()
+                    meta = meta_resp.json()
                 download_url = meta.get("downloadUrl")
                 if not download_url:
                     raise RuntimeError(
