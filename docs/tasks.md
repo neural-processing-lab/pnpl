@@ -104,6 +104,17 @@ from pnpl.tasks.pallier2025 import WordClassification
   vocabulary to the *k* most-frequent tokens — useful for the paper's
   "top-250" evaluation.
 
+## MegNIST tasks
+
+```python
+from pnpl.tasks import DigitClassification  # also at pnpl.tasks.megnist
+```
+
+- `DigitClassification()` — 10-class imagined-digit classification. MegNIST
+  ships pre-epoched trials, so the task takes no window arguments: it emits
+  one `(trial_idx, label)` sample per trial and returns the integer label
+  0–9 unchanged. `label_info['classes']` is `['zero', …, 'nine']`.
+
 ## Schöffelen 2019 (MOUS) tasks
 
 ```python
@@ -127,3 +138,5 @@ For continuous-data tasks, sample tuples follow:
 trigger code for MOUS, or a phoneme symbol for phoneme classification.
 The dataset translates it to the final tensor label via
 `task.get_label(sample)` and the `label_info` lookup.
+
+For epoched datasets (MegNIST) the tuple is simply `(trial_idx, label)`.

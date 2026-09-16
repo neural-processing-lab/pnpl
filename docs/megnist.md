@@ -70,12 +70,26 @@ additional normalisation (`standardize=False`).
 PNPL can optionally apply channel-wise standardisation:
 
 ```python
-dataset = MegNIST(
+train = MegNIST(
     data_path="./data/MegNIST",
     partition="train",
     standardize=True,
 )
+
+# Reuse the train statistics for validation/test instead of fitting new ones
+val = MegNIST(
+    data_path="./data/MegNIST",
+    partition="validation",
+    standardize=True,
+    channel_means=train.channel_means,
+    channel_stds=train.channel_stds,
+)
 ```
+
+With `standardize=True` and no explicit `channel_means`/`channel_stds`, the
+statistics are computed from the partition being loaded. Pass the train
+statistics to the validation and test partitions, as above, to avoid fitting
+normalisation on held-out data.
 
 Channel-wise standardisation estimates one mean and standard deviation per
 MEG sensor, rather than separately for every time point. It is PNPL's
@@ -91,3 +105,29 @@ apply it separately in your analysis pipeline.
 ## Data source
 
 Hugging Face dataset: `pnpl/MegNIST`
+
+Alongside the serialised HDF5 splits, the repository contains the raw BIDS
+recordings (4 sessions × 3 runs), the intermediate preprocessing derivatives
+(`bads+headpos+sss+notch+bp+ds`), head-position files and preprocessing
+reports.
+
+## Licence and citation
+
+MegNIST is released under the
+[Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)
+licence. It is free for research and other non-commercial use; for
+commercial licensing enquiries contact Oxford University Innovation.
+
+If you use MegNIST, please cite:
+
+Kwon, T., Somaiya, P., Elvers, G., Mantegna, F., Camera, A., Braeutigam, S.,
+Woolrich, M. and Parker Jones, O. (2026). MegNIST: A Benchmark for
+Non-Invasive Inner Speech Decoding.
+
+```bibtex
+@misc{kwon2026megnist,
+  title={{MegNIST}: A Benchmark for Non-Invasive Inner Speech Decoding},
+  author={Kwon, Teyun and Somaiya, Pratik and Elvers, Gereon and Mantegna, Francesco and Camera, Anna and Braeutigam, Sven and Woolrich, Mark and Parker Jones, Oiwi},
+  year={2026}
+}
+```

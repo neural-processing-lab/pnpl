@@ -13,6 +13,7 @@ and the dataset materializes preprocessed H5 files on demand.
 | --- | --- | --- | --- |
 | `LibriBrain` | Hugging Face `pnpl/LibriBrain` | none | preprocessed H5 |
 | `LibriBrain100` | HF `pnpl/LibriBrain` ∪ `pnpl/LibriBrain2` (deep + broad release) | none | preprocessed H5 |
+| `MegNIST` | Hugging Face `pnpl/MegNIST` | none | epoched H5 (`train`/`val`/`test`) |
 | `Gwilliams2022` | OSF `ag3kj` (MEG-MASC) | none | KIT `.con` → H5 |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud login | CTF `.ds` → H5 |
 | `Schoffelen2019` | Radboud `DSC_3011020.09_236_v1` (MOUS) | Radboud login | CTF `.ds` → H5 |
@@ -25,6 +26,7 @@ from pnpl.datasets import (
     # Task-based entry points
     LibriBrain,
     LibriBrain100,
+    MegNIST,
     Gwilliams2022,
     Armeni2022,
     Schoffelen2019,
@@ -46,6 +48,7 @@ See the per-dataset pages for end-to-end examples:
 
 - [LibriBrain](libribrain.md) — original release (sub-0 × Sherlock1..7), speech / phoneme / word / sentence tasks
 - [LibriBrain100](libribrain100.md) — full release: sub-0 across 9 Sherlock books + TIMIT + MOCHA-TIMIT + 30 Moth podcasts, plus 32 broad subjects on Sherlock1 ses-11/ses-12
+- [MegNIST](megnist.md) — imagined-digit decoding (0–9), 12,000 pre-epoched trials from one participant, Hugging Face
 - [Gwilliams 2022 (MEG-MASC)](gwilliams2022.md) — story listening, OSF
 - [Armeni 2022](armeni2022.md) — audiobook listening, Radboud
 - [Schöffelen 2019 (MOUS)](schoffelen2019.md) — sentence comprehension, Radboud
@@ -61,10 +64,12 @@ Every dataset class composes the same building blocks (see
   fetch missing files from the appropriate remote
 - `BIDSMixin` for BIDS-style path resolution (`sub-XXX/ses-XXX/...`)
 - `ContinuousH5Mixin` for windowed reads from H5
+- `EpochedH5Mixin` for datasets that ship pre-epoched `(trials, channels, time)`
+  arrays (MegNIST)
 - `StandardizationMixin` for per-channel z-scoring + outlier clipping
 
 The first time you instantiate a dataset, missing files are downloaded
-and — for the non-LibriBrain corpora — a configurable preprocessing
+and — for the corpora that are not already released as H5 — a configurable preprocessing
 pipeline is run against the raw recording and cached as H5. Subsequent
 constructions read directly from the cached H5.
 
@@ -83,7 +88,7 @@ project) and uses HTTP Basic auth against the WebDAV endpoint.
 
 ## Task object
 
-All four task-based datasets take a `task=` argument that conforms to
+All task-based datasets take a `task=` argument that conforms to
 `pnpl.tasks.base.TaskProtocol`. A task object decides:
 
 1. how raw events are turned into sample tuples (`collect_samples`),
