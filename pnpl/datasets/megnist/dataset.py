@@ -94,10 +94,8 @@ class MegNIST(
                 f"No MegNIST samples found for partition={partition!r}"
             )
 
-        if "sample_frequency" in self.attrs:
-            self.sfreq = float(self.attrs["sample_frequency"])
-        elif self.times is not None and len(self.times) > 1:
-            self.sfreq = float(1.0 / (self.times[1] - self.times[0]))
+        if self.times is not None and len(self.times) > 1:
+            self.sfreq = float(round(1.0 / np.median(np.diff(self.times))))
         else:
             self.sfreq = 250.0
 
