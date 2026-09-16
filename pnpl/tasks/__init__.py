@@ -22,6 +22,9 @@ from .libribrain import (
     WordDetection,  # backwards-compat alias for WordClassification
 )
 
+# MegNIST tasks
+from .megnist import DigitClassification
+
 __all__ = [
     # Protocol
     "TaskProtocol",
@@ -30,4 +33,6 @@ __all__ = [
     "PhonemeClassification",
     "WordClassification",
     "WordDetection",
+    # MegNIST
+    "DigitClassification",
 ]

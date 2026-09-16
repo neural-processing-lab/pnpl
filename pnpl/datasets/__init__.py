@@ -38,6 +38,9 @@ _PUBLIC_MAP = {
     # Pallier et al. (2025) "LittlePrince — Listen" — OpenNeuro ds007523
     "Pallier2025": ("pnpl.datasets.pallier2025.dataset", "Pallier2025"),
 
+    # MegNIST — imagined-digit MEG benchmark
+    "MegNIST": ("pnpl.datasets.megnist.dataset", "MegNIST"),
+
     # Utilities
     "GroupedDataset": ("pnpl.datasets.grouped_dataset", "GroupedDataset"),
 }
