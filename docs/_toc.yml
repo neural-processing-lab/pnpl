@@ -15,6 +15,7 @@ parts:
       - file: armeni2022
       - file: schoffelen2019
       - file: pallier2025
+      - file: megnist
   - caption: Pipelines
     chapters:
       - file: preprocessing

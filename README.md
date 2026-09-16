@@ -1,16 +1,13 @@
 # 🍍PNPL Brain Data Deep Learning Library
 
-> The current primary use of the PNPL library is for the LibriBrain competition. [Click here](https://neural-processing-lab.github.io/2025-libribrain-competition/) to learn more and get started!
+> PNPL supports the [PNPL Competition series](https://libribrain.com/) as well as general brain-data deep learning workflows. See the [2026 PNPL Competition](https://libribrain.com/editions/2026/) and the [2025 PNPL Competition](https://libribrain.com/editions/2025/) for competition-specific documentation.
 
-Welcome to PNPL — a Python toolkit for loading and processing brain
-datasets for deep learning. The package now ships four MEG dataset
-loaders (LibriBrain, MEG-MASC, Armeni 2022, MOUS) plus a composable
-preprocessing pipeline and shared task abstractions.
+Welcome to PNPL — a Python toolkit for loading and processing brain datasets for deep learning. The package provides loaders for several MEG datasets, including LibriBrain, LibriBrain100, MegNIST, MEG-MASC, Armeni 2022, MOUS, and LittlePrince, plus a composable preprocessing pipeline and shared task abstractions.
 
 ## Features
 - Friendly dataset APIs backed by real MEG recordings
 - Composable preprocessing pipeline (`bads+headpos+sss+notch+bp+ds`, etc.)
-- On-demand download from Hugging Face (LibriBrain), OSF (MEG-MASC), Radboud WebDAV (Armeni, MOUS), and OpenNeuro (LittlePrince)
+- On-demand download from Hugging Face (LibriBrain, LibriBrain100, MegNIST), OSF (MEG-MASC), Radboud WebDAV (Armeni, MOUS), and OpenNeuro (LittlePrince)
 - Task-based API: pick a task object, get `(x, y)` (or `(x, y, info)`) windows
 - Works with PyTorch `DataLoader` out of the box
 - Clean namespace and lazy imports to keep startup fast
@@ -85,6 +82,7 @@ ds = LibriBrain100(
 | --- | --- | --- |
 | `LibriBrain` (+ `LibriBrainSpeech`/`Phoneme`/`Word`/`Sentence`) | Hugging Face `pnpl/LibriBrain` | none |
 | `LibriBrain100` (+ `LibriBrain100Speech`/`Phoneme`/`Word`) | HF `pnpl/LibriBrain` ∪ `pnpl/LibriBrain2` (deep + broad release) | none |
+| `MegNIST` | Hugging Face `pnpl/MegNIST` | none |
 | `Gwilliams2022` (MEG-MASC) | OSF `ag3kj` | none |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud credentials |
 | `Schoffelen2019` (MOUS) | Radboud `DSC_3011020.09_236_v1` | Radboud credentials |
@@ -129,8 +127,9 @@ We publish documentation with Jupyter Book and GitHub Pages.
 
 The docs cover:
 
-- Per-dataset pages (`docs/libribrain.md`, `docs/gwilliams2022.md`,
-  `docs/armeni2022.md`, `docs/schoffelen2019.md`)
+- Per-dataset pages (`docs/libribrain.md`, `docs/libribrain100.md`,
+  `docs/megnist.md`, `docs/gwilliams2022.md`, `docs/armeni2022.md`,
+  `docs/schoffelen2019.md`, `docs/pallier2025.md`)
 - The preprocessing pipeline (`docs/preprocessing.md`) and tasks
   (`docs/tasks.md`)
 - Tutorials for the LibriBrain competition tracks
