@@ -6,3 +6,4 @@ torch
 h5py
 huggingface_hub
 kaggle
+scikit-learn

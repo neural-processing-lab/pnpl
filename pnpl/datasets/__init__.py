@@ -26,6 +26,9 @@ _PUBLIC_MAP = {
     "LibriBrain100Phoneme": ("pnpl.datasets.libribrain100.compat", "LibriBrain100Phoneme"),
     "LibriBrain100Word": ("pnpl.datasets.libribrain100.compat", "LibriBrain100Word"),
 
+    # Clinical communication benchmark with frozen LibriBrain occurrences
+    "ClinicalCommunication": ("pnpl.datasets.clinical_communication", "ClinicalCommunication"),
+
     # MEG-MASC (Gwilliams et al., 2022) — auto-downloads from OSF
     "Gwilliams2022": ("pnpl.datasets.gwilliams2022.dataset", "Gwilliams2022"),
 

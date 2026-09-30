@@ -5,7 +5,7 @@ title: Datasets
 # Public Datasets
 
 `pnpl.datasets` ships ready-to-use PyTorch `Dataset` classes for several
-public MEG corpora. Each dataset class follows the same shape: pass a
+public MEG corpora. Most dataset classes follow the same shape: pass a
 `task` object (from `pnpl.tasks`) plus optional include/exclude filters,
 and the dataset materializes preprocessed H5 files on demand.
 
@@ -13,11 +13,15 @@ and the dataset materializes preprocessed H5 files on demand.
 | --- | --- | --- | --- |
 | `LibriBrain` | Hugging Face `pnpl/LibriBrain` | none | preprocessed H5 |
 | `LibriBrain100` | HF `pnpl/LibriBrain` ∪ `pnpl/LibriBrain2` (deep + broad release) | none | preprocessed H5 |
+| `ClinicalCommunication` | Frozen LibriBrain clinical benchmark | none | pinned H5 + recording cache |
 | `MegNIST` | Hugging Face `pnpl/MegNIST` | none | epoched H5 (`train`/`val`/`test`) |
 | `Gwilliams2022` | OSF `ag3kj` (MEG-MASC) | none | KIT `.con` → H5 |
 | `Armeni2022` | Radboud `DSC_3011085.05_995_v1` | Radboud login | CTF `.ds` → H5 |
 | `Schoffelen2019` | Radboud `DSC_3011020.09_236_v1` (MOUS) | Radboud login | CTF `.ds` → H5 |
 | `Pallier2025` | OpenNeuro `ds007523` (LittlePrince Listen) | none | Elekta `.fif` → H5 |
+
+The [clinical communication benchmark](clinical_communication.md) has a fixed
+window/sentence API and preserves the published occurrence assignments.
 
 Common imports:
 
