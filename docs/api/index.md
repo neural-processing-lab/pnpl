@@ -29,6 +29,7 @@ module.
    pnpl.datasets.armeni2022.dataset.Armeni2022
    pnpl.datasets.schoffelen2019.dataset.Schoffelen2019
    pnpl.datasets.pallier2025.dataset.Pallier2025
+   pnpl.datasets.clinical_communication.dataset.ClinicalCommunication
    pnpl.datasets.grouped_dataset.GroupedDataset
    pnpl.datasets.hdf5.dataset.HDF5Dataset
 ```

@@ -157,3 +157,19 @@ pytest -q
 
 ## License
 BSD‑3‑Clause. See `LICENSE` for details.
+
+### Clinical communication benchmark
+
+`ClinicalCommunication` provides the frozen LibriBrain recording split,
+the optional 50 development sentences, and the original 100-sentence clinical
+test set (200 sentences opt-in). Each word returns the first `k=1..5` original
+occurrence windows separately. See [the benchmark guide](docs/clinical_communication.md).
+
+```python
+from pnpl.datasets import ClinicalCommunication
+
+train = ClinicalCommunication("./data/LibriBrain100", partition="train")
+val = ClinicalCommunication("./data/LibriBrain100", partition="val")
+dev = ClinicalCommunication("./data/LibriBrain100", partition="dev", k=5)
+test = ClinicalCommunication("./data/LibriBrain100", partition="test", k=5)
+```

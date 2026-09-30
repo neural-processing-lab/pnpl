@@ -7,9 +7,11 @@ setup(
     include_package_data=True,
     package_data={
         "pnpl.competition": ["data/*.csv"],
+        "pnpl.datasets.clinical_communication": ["data/*.json", "data/*.json.gz", "data/*.npy"],
     },
     install_requires=[
         "mne",
+        "scikit-learn",
         "mne_bids",
         "numpy",
         "pandas",

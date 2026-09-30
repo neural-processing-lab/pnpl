@@ -11,6 +11,7 @@ parts:
     chapters:
       - file: libribrain
       - file: libribrain100
+      - file: clinical_communication
       - file: gwilliams2022
       - file: armeni2022
       - file: schoffelen2019
